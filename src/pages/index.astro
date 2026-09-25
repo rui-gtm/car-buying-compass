@@ -163,7 +163,7 @@ const toc = [
         </nav>
 
         <div class="min-w-0 lg:order-1">
-          <details class="editorial-details mt-8 lg:hidden">
+          <details class="editorial-details mt-8 hidden sm:block lg:hidden">
             <summary>On this page</summary>
             <nav aria-label="Table of contents" class="toc-nav mt-4">
               {toc.map((item) => <a href={item.href} class="toc-link">{item.label}</a>)}

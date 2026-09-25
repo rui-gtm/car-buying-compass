@@ -10,7 +10,7 @@ interface Props {
   modifiedTime?: string;
 }
 
-const SITE_NAME = "The McCarroll's Account";
+const SITE_NAME = "My McCarroll's Account";
 const TWITTER_HANDLE = "@buyersaccount";
 
 const {
@@ -73,13 +73,16 @@ const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
     </a>
     <header class="sticky top-0 z-40 bg-background">
       <div
-        class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+        class="mx-auto flex max-w-6xl flex-row items-center justify-between gap-2 px-4 py-4 sm:px-6"
       >
-        <a href="/" class="w-fit py-2 text-sm font-semibold text-foreground no-underline">
-          The McCarroll's account
+        <a
+          href="/"
+          class="w-fit max-w-[8rem] truncate py-2 text-sm font-semibold text-foreground no-underline sm:max-w-none"
+        >
+          My McCarroll's account
         </a>
         <nav aria-label="Primary navigation">
-          <ul class="flex items-center gap-1">
+          <ul class="flex items-center gap-0.5 sm:gap-1">
             {
               navigation.map((item) => {
                 const isActive =
@@ -90,7 +93,7 @@ const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
                     <a
                       href={item.href}
                       aria-current={isActive ? "page" : undefined}
-                      class={`inline-flex min-h-11 items-center border-b-2 px-2 text-sm font-medium no-underline transition-colors sm:px-3 ${
+                      class={`inline-flex min-h-11 items-center whitespace-nowrap border-b-2 px-1.5 text-sm font-medium no-underline transition-colors sm:px-3 ${
                         isActive
                           ? "border-primary text-primary"
                           : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"

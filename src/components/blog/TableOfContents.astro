@@ -17,7 +17,7 @@ const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
 {
   items.length > 0 && variant === "mobile" && (
     // Collapsed by default on small screens so the page doesn't open on a wall of links.
-    <details class="editorial-details lg:hidden">
+    <details class="editorial-details hidden sm:block lg:hidden">
       <summary>On this page</summary>
       <nav aria-label="Table of contents" class="toc-nav mt-4">
         {items.map((item) => (
