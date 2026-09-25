@@ -1,36 +1,22 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/blog/PostCard.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.topicNumber - b.data.topicNumber,
+);
 
 const vehicles = [
   {
-    name: "Toyota Corolla",
-    year: "2023",
-    variant: "Ascent Sport Hybrid hatch",
+    name: "Haval Jolion",
+    year: "2026",
+    variant: "Vanta",
     verdict:
-      "Efficient and easy to live with, but rear-seat and boot space require a careful family test.",
-    body: "In mixed suburban driving, the hybrid system made low-speed progress quiet and economical. The controls were straightforward and the standard safety equipment was easy to understand rather than buried in menus.",
+      "A well-equipped, keenly priced small SUV — worth test driving carefully and inspecting closely at delivery.",
+    body: "The Vanta trim brings a distinctive blacked-out look and a generous features list for its price point, with the kind of standard equipment that competitors often reserve for higher grades. On test drives, the cabin feels modern and the controls are easy to learn.",
     detail:
-      "The trade-off is packaging. A rear-facing child seat can noticeably reduce front-passenger space, and the hybrid battery arrangement limits the flexibility some hatch buyers expect. Take the people and luggage you actually carry to the test drive.",
-  },
-  {
-    name: "Mazda CX-30",
-    year: "2024",
-    variant: "G25 Touring AWD",
-    verdict:
-      "A polished small SUV with an excellent cabin, offset by modest rear visibility and space.",
-    body: "The steering, seating position and conventional automatic make the CX-30 feel settled in city traffic and on faster roads. Materials are unusually good for the class, and the rotary controller is less distracting than a touchscreen once learnt.",
-    detail:
-      "The sloping body shape compromises the rear quarter view and makes the back seat feel tighter than the exterior dimensions suggest. The larger engine is responsive, although buyers prioritising fuel use should compare it carefully with hybrid alternatives.",
-  },
-  {
-    name: "Kia Sportage",
-    year: "2024",
-    variant: "SX+ 1.6T AWD",
-    verdict:
-      "A practical, well-equipped family SUV whose busy low-speed ride deserves an extended test drive.",
-    body: "The broad rear seat, useful boot opening and clear surround-view cameras suit daily family use. Performance is adequate for overtaking, and the warranty provides useful reassurance for buyers planning to keep the car.",
-    detail:
-      "On patchy suburban roads the ride can feel more restless than expected, particularly on larger wheels. Some climate and media functions share the same control strip, so try common adjustments while driving rather than judging the cabin at rest.",
+      "Our own car was delivered with visible panel damage, so beyond the usual test-drive checks, insist on inspecting every panel in good light at collection before signing anything. Read the full account of what we found at delivery.",
   },
 ];
 
@@ -57,7 +43,7 @@ const assessment = [
     stage: "Communication",
     anchor: "two-attempts",
     rating: "Poor",
-    text: "A sales manager offered two services instead of repairing the door, then said it needed repainting — an explanation we hadn't heard before, despite two repair visits and repeated assurances that the damage was fixed.",
+    text: "A sales manager offered two services instead of repairing the door, then said it needed repainting, an explanation we hadn't heard before, despite two repair visits and repeated assurances that the damage was fixed.",
   },
   {
     stage: "Complaint handling",
@@ -122,9 +108,25 @@ const assessment = [
         </div>
       </section>
 
-      <section aria-labelledby="dealership-assessment" class="mt-24">
+      <section aria-labelledby="in-depth-reviews" class="mt-24">
         <div class="max-w-reading">
           <p class="eyebrow">Section B</p>
+          <h2 id="in-depth-reviews" class="mt-3 text-3xl font-bold text-foreground">
+            In-depth Jolion review series
+          </h2>
+          <p class="mt-4 text-muted-foreground">
+            A growing series covering price and deals, variant selection, safety and more, each
+            topic answered in one focused post.
+          </p>
+        </div>
+        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post) => <PostCard post={post} />)}
+        </div>
+      </section>
+
+      <section aria-labelledby="dealership-assessment" class="mt-24">
+        <div class="max-w-reading">
+          <p class="eyebrow">Section C</p>
           <h2 id="dealership-assessment" class="mt-3 text-3xl font-bold text-foreground">
             Dealership assessment: McCarroll's GWM Artarmon
           </h2>

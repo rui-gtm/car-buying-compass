@@ -30,7 +30,6 @@ const navigation = [
   { href: "/", label: "Story" },
   { href: "/reviews", label: "Reviews" },
   { href: "/guides", label: "Buying guide" },
-  { href: "/blog", label: "Jolion review" },
 ] as const;
 
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
@@ -119,9 +118,10 @@ const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
             author@example.com
           </a>
         </div>
-        <p class="max-w-md text-sm leading-6 text-background/70 sm:justify-self-end">
-          An independent, first-person account by the customer. The events described happened to
-          the author; McCarroll's has not yet been invited to respond specifically to this article.
+        <p class="max-w-none text-sm leading-6 text-background/70 sm:justify-self-end">
+          Disclosure: this is a customer account of one purchase, including our recollections of
+          conversations. The dispute awaits an NCAT hearing. McCarroll's has not yet been invited
+          to respond specifically to this article.
         </p>
       </div>
     </footer>
