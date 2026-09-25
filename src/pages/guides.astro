@@ -9,8 +9,8 @@ const faqs = [
       "Before paying a deposit, confirm the exact vehicle, drive-away price, refund conditions and delivery estimate in writing.",
     detail:
       "Record the model year, variant, engine or powertrain, colour, options and whether the car is new, demonstrator or used. Ask whether the deposit is refundable, what event allows either party to cancel, and whether the quoted delivery date is an estimate or a commitment. Do not rely on a brochure or spoken assurance where a feature matters to your decision.",
-    note: "In the author's account, a discussed feature did not appear on the written order.",
-    storyId: "the-order",
+    note: "The author's dispute began at delivery, not before it — see what to inspect when the car arrives.",
+    storyId: "collection",
   },
   {
     id: "contract-wording",
@@ -19,8 +19,8 @@ const faqs = [
       "The contract should identify the precise car, total price, included features, agreed conditions and any promises that affected your decision.",
     detail:
       "Read every field before signing and strike out blank spaces where appropriate. If finance approval, an independent inspection, a trade-in value or a delivery deadline matters, ask for it to be written as a condition. Keep the version you signed and compare it with the dealer's final copy before leaving.",
-    note: "The contract in the author's account named the variant but not the disputed feature.",
-    storyId: "paperwork",
+    note: "In the author's account, no repair was ever put in writing — only verbal assurances that the damage was fixed.",
+    storyId: "dents-fixed",
   },
   {
     id: "delivery-inspection",
@@ -29,8 +29,18 @@ const faqs = [
       "At delivery, inspect the car in good light and verify its identity, condition, specification, accessories and documents before accepting it.",
     detail:
       "Check the VIN against the contract and registration paperwork. Test the keys, lights, cameras, infotainment, charging cable where relevant, spare wheel or repair kit, and every option you paid for. Photograph the vehicle and odometer. If something is wrong, write it on the handover record before driving away and ask what will happen next.",
-    note: "The author discovered the specification issue only after the handover.",
-    storyId: "delivery",
+    note: "The author found two dents, a scratch and a paint stain at collection, before driving away.",
+    storyId: "collection",
+  },
+  {
+    id: "repair-scope-writing",
+    question: "What should I get in writing before a repair, and before a second visit?",
+    answer:
+      "Before the car goes back for any repair, ask the dealership to confirm the scope of work in writing, including whether a panel will be repainted rather than touched up.",
+    detail:
+      "A touch-up and a repaint are different jobs with different outcomes for a panel's finish and resale value. Ask what assessment was done, what work is planned, and get that scope confirmed in writing before booking the visit — not just a verbal assurance that 'it will be fixed'. If the plan changes between visits, ask why and get the revised scope in writing too.",
+    note: "The author learned repainting was needed only after two repair visits and repeated assurances that the scratch was fixed.",
+    storyId: "two-attempts",
   },
   {
     id: "not-as-described",
@@ -39,8 +49,8 @@ const faqs = [
       "A vehicle sold by a dealer must match its description and comply with the consumer guarantees that apply under Australian Consumer Law.",
     detail:
       "The available remedy depends on the facts, including whether the failure is major and whether it can be fixed within a reasonable time. Consumer guarantees operate separately from a manufacturer warranty. For advice about your circumstances, contact your state or territory consumer agency or obtain independent legal advice.",
-    note: "The author's unresolved question is whether the delivered specification matched what was represented and agreed.",
-    storyId: "first-contact",
+    note: "The author's unresolved question is whether a repaired and repainted door reduces the car's resale value, and what that's worth.",
+    storyId: "why-declined",
   },
   {
     id: "escalate-complaint",
@@ -49,8 +59,8 @@ const faqs = [
       "Escalate in writing, state the outcome you seek, set a reasonable response date and then contact the relevant consumer agency if the matter remains unresolved.",
     detail:
       "Begin with the dealership's sales or service contact, then ask for the dealer principal or complaints manager. Keep the message concise: chronology, evidence, problem, requested remedy and response date. Your state or territory fair trading or consumer affairs body can explain the next step; tribunal or court options vary by location and claim.",
-    note: "The author used a dated written summary after telephone follow-up produced no clear position.",
-    storyId: "complaint",
+    note: "The author raised NCAT after two failed repairs and ongoing email follow-up produced no resolution.",
+    storyId: "ncat-offer",
   },
   {
     id: "document-records",
@@ -59,8 +69,8 @@ const faqs = [
       "Keep every version of the advertisement, quote, contract, invoice, payment record and message, plus dated notes of conversations.",
     detail:
       "Save screenshots as files rather than relying on a listing remaining online. After an important call, email a short summary beginning with 'My understanding of our conversation is…' and invite corrections. Keep photographs from inspection and delivery, the VIN, odometer reading, names or job titles of contacts, and a simple chronology of promised and actual response dates.",
-    note: "Contemporaneous emails allowed the author to separate written terms from remembered conversations.",
-    storyId: "records",
+    note: "Text messages and emails became the record once verbal assurances that the scratch was fixed proved wrong twice.",
+    storyId: "second-collection",
   },
 ];
 ---

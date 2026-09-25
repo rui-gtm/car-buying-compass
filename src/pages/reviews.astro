@@ -36,34 +36,34 @@ const vehicles = [
 
 const assessment = [
   {
-    stage: "Sales",
-    anchor: "the-order",
-    rating: "Adequate",
-    text: "Questions were answered promptly and the test drive was arranged without pressure. I recall being told the vehicle matched the discussed specification, but that point was not added to the written order.",
-  },
-  {
-    stage: "Paperwork",
-    anchor: "paperwork",
-    rating: "Poor",
-    text: "The contract stated the model and price but did not record the feature that later became disputed. The final paperwork was presented close to closing time, leaving little room for a careful comparison.",
-  },
-  {
     stage: "Delivery",
-    anchor: "delivery",
+    anchor: "collection",
     rating: "Poor",
-    text: "The handover was brief and the missing feature was not identified on the delivery checklist. In my opinion, a structured walk-through would probably have exposed the mismatch before I drove away.",
+    text: "The car arrived with two dents, a scratch above the driver's door handle and a paint stain on the bonnet. The damage was visible immediately and reported on the spot.",
   },
   {
-    stage: "Aftersales",
-    anchor: "first-contact",
+    stage: "First repair",
+    anchor: "dents-fixed",
     rating: "Adequate",
-    text: "The service desk logged the issue and returned the first call. Follow-up then moved between departments, and I did not receive a clear written position within the stated timeframe.",
+    text: "The dents and bonnet stain were fixed within about three days. The driver's door scratch was not resolved, and no explanation was given at the time about what further work it might need.",
+  },
+  {
+    stage: "Second repair",
+    anchor: "second-collection",
+    rating: "Poor",
+    text: "The car went back for another three days and was returned with the scratch still visible. To us, the touch-up paint applied looked worse than before.",
+  },
+  {
+    stage: "Communication",
+    anchor: "two-attempts",
+    rating: "Poor",
+    text: "A sales manager offered two services instead of repairing the door, then said it needed repainting — an explanation we hadn't heard before, despite two repair visits and repeated assurances that the damage was fixed.",
   },
   {
     stage: "Complaint handling",
-    anchor: "current",
+    anchor: "ncat-offer",
     rating: "Poor",
-    text: "Northvale Motors acknowledged the complaint but has not provided a proposed resolution. Requests for the dealership's account of the pre-sale conversation remain unanswered as at the latest update.",
+    text: "McCarroll's offer to repaint the door and provide three services only followed notice of an NCAT claim. The offer has not resolved the dispute, and a hearing is yet to be scheduled.",
   },
 ];
 ---
@@ -96,8 +96,8 @@ const assessment = [
             everyday use.
           </p>
           <p class="mt-5">
-            <a href="/#choosing-car" class="editorial-link"
-              >See how the search for a specific feature began</a
+            <a href="/#collection" class="editorial-link"
+              >See the condition the car was in at collection</a
             >.
           </p>
         </div>
@@ -126,7 +126,7 @@ const assessment = [
         <div class="max-w-reading">
           <p class="eyebrow">Section B</p>
           <h2 id="dealership-assessment" class="mt-3 text-3xl font-bold text-foreground">
-            Dealership assessment: Northvale Motors
+            Dealership assessment: McCarroll's GWM Artarmon
           </h2>
           <p class="mt-4 text-muted-foreground">
             This assessment concerns the author's transaction and complaint. It is not a rating of

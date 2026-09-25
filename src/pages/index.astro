@@ -3,146 +3,139 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 const timeline = [
   {
-    id: "research",
-    date: "3 February 2026",
-    location: "Home, Melbourne",
-    title: "The advertised specification",
-    text: "I compared the manufacturer's Australian website with Northvale Motors' listing and shortlisted a particular variant because it appeared to include a driver-assistance feature I wanted.",
+    id: "tl-collection",
+    date: "May 2026",
+    location: "McCarroll's GWM, Artarmon",
+    title: "The car arrives with damage",
+    text: "I collected my first car, a brand-new 2026 Haval Jolion Vanta. At collection, we found two dents on the rear passenger door, a deep scratch above the driver's door handle and a paint stain on the bonnet. Protective wrapping was also trapped between a door's rubber seal and frame. We reported the problems immediately.",
   },
   {
-    id: "the-order",
-    date: "7 February 2026",
-    location: "Northvale Motors",
-    title: "A deposit was paid",
-    text: "After a test drive and discussion about the feature, I paid a $1,000 deposit. The written order identified the variant but did not list that feature separately.",
+    id: "tl-repair-one",
+    date: "June 2026",
+    location: "McCarroll's GWM, Artarmon",
+    title: "First repair: two fixes, one left",
+    text: "The dealership kept the car for around three days. The two dents and the bonnet stain were successfully removed. The driver's door scratch remained, so we raised it again.",
   },
   {
-    id: "paperwork",
-    date: "18 February 2026",
+    id: "tl-repair-two",
+    date: "June 2026, roughly two weeks later",
+    location: "McCarroll's GWM, Artarmon",
+    title: "Second repair, same assurance",
+    text: "The car went back for another three days. Before collecting it, we contacted the dealership to check the work was complete and were assured, once again, that the damage had been fixed.",
+  },
+  {
+    id: "tl-second-collection",
+    date: "June 2026",
+    location: "McCarroll's GWM, Artarmon",
+    title: "“Fixed”—until we saw the car",
+    text: "The scratch still had not been properly repaired. Touch-up paint appeared to have been applied, but to us the finish looked worse than before. A sales manager offered two services, valued at roughly $400–$500, instead of further repairing the door.",
+  },
+  {
+    id: "tl-manager-response",
+    date: "June 2026",
+    location: "McCarroll's GWM, Artarmon",
+    title: "“I'm not going to paint this”",
+    text: "The manager explained that a proper repair would need the driver's door removed and repainted — as we recall it, without looking at the damaged area during the conversation. He said words to that effect, then walked away.",
+  },
+  {
+    id: "tl-ncat-notice",
+    date: "Mid-2026",
+    location: "By email and text",
+    title: "We raised NCAT",
+    text: "We kept pursuing the issue by email and text. After we said we intended to take the matter to the NSW Civil and Administrative Tribunal, the dealership's position changed.",
+  },
+  {
+    id: "tl-new-offer",
+    date: "Mid-2026",
     location: "By email",
-    title: "The contract was issued",
-    text: "The contract stated the model, colour and drive-away price. I signed it without asking for the discussed specification to be written into the special conditions.",
+    title: "A new offer, after the fact",
+    text: "McCarroll's offered to repaint the driver's door and provide three services, and named a panel shop it said had experience with European vehicles. By then, two unsuccessful repairs had already cost our confidence in the process.",
   },
   {
-    id: "delivery",
-    date: "12 March 2026",
-    location: "Northvale Motors",
-    title: "The car was collected",
-    text: "The handover covered pairing a phone and the service schedule. I did not test every driver-assistance function before leaving, and later found the expected feature was absent.",
-  },
-  {
-    id: "first-contact",
-    date: "13 March 2026",
-    location: "By telephone",
-    title: "The discrepancy was reported",
-    text: "I explained what I believed had been represented before purchase. I was told the matter would be checked, but no written position followed that day.",
-  },
-  {
-    id: "records",
-    date: "16–23 March 2026",
-    location: "By email",
-    title: "The record was assembled",
-    text: "I sent the order, contract, screenshots and my dated recollection of the sales conversation. The replies acknowledged receipt without addressing the substance.",
-  },
-  {
-    id: "complaint",
-    date: "2 April 2026",
-    location: "By email",
-    title: "A formal complaint was lodged",
-    text: "I asked Northvale Motors to state whether it accepted my account and what remedy it proposed. The requested response date passed without a resolution.",
-  },
-  {
-    id: "current",
-    date: "17 September 2026",
+    id: "tl-current",
+    date: "25 September 2026",
     location: "Ongoing",
-    title: "The position remains unresolved",
-    text: "Northvale Motors has acknowledged the complaint. The author is still waiting for a substantive written response and has not agreed to a resolution.",
+    title: "Unresolved, awaiting a hearing",
+    text: "The driver's door scratch has not been satisfactorily repaired. Some protective wrapping remains trapped. The dealership's latest offer remains repainting the door plus three services, and an NCAT hearing is yet to be scheduled.",
   },
 ];
 
-const stops = [
-  {
-    href: "#choosing-car",
-    title: "Before the deposit",
-    teaser: "The listing, the test drive, and a detail I didn't get in writing.",
-  },
-  {
-    href: "#signing",
-    title: "On paper",
-    teaser: "What the contract recorded, and the line it left out.",
-  },
-  {
-    href: "#handover",
-    title: "Handover, and what I found after",
-    teaser: "A quick walkaround, then a discovery later that same day.",
-  },
-  {
-    href: "#response",
-    title: "Following up",
-    teaser: "One phone call, a written chronology, and a complaint still awaiting an answer.",
-  },
+const toc = [
+  { href: "#collection", label: "Collection day" },
+  { href: "#dents-fixed", label: "The dents were fixed. The scratch wasn't." },
+  { href: "#second-collection", label: "“Fixed”—until we saw the car" },
+  { href: "#two-attempts", label: "Why did it take two attempts to explain the repair?" },
+  { href: "#ncat-offer", label: "After we raised NCAT, the offer changed" },
+  { href: "#why-declined", label: "Why we didn't accept repainting and three services" },
+  { href: "#timeline-heading", label: "The timeline" },
+  { href: "#dispute-status", label: "Where the dispute stands" },
+  { href: "#differently", label: "A first car shouldn't start like this" },
+  { href: "#fair-outcome", label: "What do you think is a fair outcome?" },
 ];
 ---
 
 <BaseLayout
-  title="One customer's experience with McCarroll's."
-  description="A personal review of McCarroll's, documenting one customer's vehicle purchase, timeline, supporting evidence, company responses and latest outcome."
+  title="McCarroll's GWM Artarmon review: a new car, two repair attempts, and a scratch still unresolved"
+  description="A personal account of a brand-new Haval Jolion Vanta delivered with damage, two unsuccessful repair attempts at McCarroll's GWM Artarmon, and a scratch dispute now heading to an NCAT hearing."
   ogType="article"
-  publishedTime="2026-04-02"
-  modifiedTime="2026-09-17"
+  publishedTime="2026-07-01"
+  modifiedTime="2026-09-25"
 >
   <main id="main-content">
     <article class="mx-auto max-w-6xl px-4 pb-8 pt-16 sm:px-6 sm:pt-24">
       <header>
         <p class="eyebrow">First-person account</p>
         <h1 class="mt-4 text-4xl font-bold leading-tight text-foreground sm:text-5xl">
-          My car-buying experience with Northvale Motors
+          My car-buying experience with McCarroll's GWM Artarmon
         </h1>
         <p class="mt-6 text-xl leading-8 text-foreground">
-          A feature discussed before purchase was not on the car I collected, and the question of
-          what was promised remains unresolved.
+          Two visits. Around six days back at the dealership. Repeated assurances that the damage
+          was fixed. Yet the scratch on my brand-new Haval remained, and the dispute is now
+          heading to an NCAT hearing.
         </p>
         <p class="mt-5 text-sm leading-6 text-muted-foreground">
-          Disclosure: the author is the customer, writing from personal experience, with no
-          affiliation to Northvale Motors or the vehicle manufacturer.
+          Disclosure: this is a customer account of one purchase, including our recollections of
+          conversations. The dispute awaits an NCAT hearing. McCarroll's has not yet been invited
+          to respond specifically to this article.
         </p>
 
         <div class="editorial-card mt-8">
-          <p class="section-marker">Current status — 17 September 2026</p>
+          <p class="section-marker">Current status — 25 September 2026</p>
           <p class="text-foreground">
-            Northvale Motors has acknowledged the complaint. The author is awaiting a substantive
-            written response.
+            The driver's door scratch has not been satisfactorily repaired. McCarroll's latest
+            offer is to repaint the door and provide three services. An NCAT hearing is yet to be
+            scheduled.
           </p>
         </div>
 
         <dl class="quick-facts mt-8">
           <div>
             <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Deposit paid
-            </dt>
-            <dd class="mt-1 text-xl font-bold text-foreground">$1,000</dd>
-            <dd class="text-sm text-muted-foreground">7 February 2026</dd>
-          </div>
-          <div>
-            <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Contract signed
-            </dt>
-            <dd class="mt-1 text-xl font-bold text-foreground">18 February</dd>
-            <dd class="text-sm text-muted-foreground">feature not listed</dd>
-          </div>
-          <div>
-            <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Car collected
             </dt>
-            <dd class="mt-1 text-xl font-bold text-foreground">12 March</dd>
-            <dd class="text-sm text-muted-foreground">feature found absent</dd>
+            <dd class="mt-1 text-xl font-bold text-foreground">May 2026</dd>
+            <dd class="text-sm text-muted-foreground">damage found on the day</dd>
           </div>
           <div>
             <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Complaint unresolved
+              First repair
             </dt>
-            <dd class="mt-1 text-xl font-bold text-foreground">168 days</dd>
-            <dd class="text-sm text-muted-foreground">since 2 April 2026</dd>
+            <dd class="mt-1 text-xl font-bold text-foreground">~3 days</dd>
+            <dd class="text-sm text-muted-foreground">dents and stain fixed, scratch remained</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Second repair
+            </dt>
+            <dd class="mt-1 text-xl font-bold text-foreground">~3 days</dd>
+            <dd class="text-sm text-muted-foreground">scratch still visible on collection</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              NCAT hearing
+            </dt>
+            <dd class="mt-1 text-xl font-bold text-foreground">Pending</dd>
+            <dd class="text-sm text-muted-foreground">not yet scheduled</dd>
           </div>
         </dl>
 
@@ -150,248 +143,299 @@ const stops = [
           In short
         </p>
         <p class="mt-2 text-lg leading-8 text-foreground">
-          I approached the purchase as an ordinary buyer: I researched the model, took a test drive,
-          discussed the specification and signed the paperwork. The uncertainty began only after
-          collection, when one feature I believed formed part of the deal was not present. The
-          documents do not settle what was said in the showroom, while later correspondence has not
-          yet produced a clear account from the dealership. This chronology records what the
-          contract stated, what I recall being told and what can be supported by dated records. It
-          also explains the small checks that might have prevented a lengthy dispute.
+          I collected a brand-new Haval Jolion Vanta from McCarroll's GWM in Artarmon and found
+          damage on it the same day. Two repair visits later, the dents and a paint stain were
+          fixed, but a scratch above the driver's door handle was not. We were told twice that it
+          had been fixed; twice, it hadn't. A sales manager eventually said the door needed
+          repainting and that he would not authorise it, before an offer to repaint it only arrived
+          once we raised the NSW Civil and Administrative Tribunal. This chronology records what
+          happened at each visit, what we were told, and why we haven't accepted the latest offer.
         </p>
       </header>
 
-      <nav aria-labelledby="stops-heading" class="stop-nav mt-10">
-        <h2
-          id="stops-heading"
-          class="text-sm font-bold uppercase tracking-wide text-muted-foreground"
-        >
-          The account in four stops
-        </h2>
-        <p class="mt-2 text-muted-foreground">
-          Read straight through, or jump to the part that matches where you are in your own
-          purchase.
-        </p>
-        <ol class="mt-6 grid gap-5">
-          {
-            stops.map((stop, index) => (
-              <li>
-                <div class="flex items-baseline gap-3">
-                  <span aria-hidden="true" class="text-sm font-bold text-primary">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <a href={stop.href} class="stop-link text-lg">
-                    {stop.title}
-                  </a>
-                </div>
-                <span class="mt-1 block pl-[2.75rem] text-muted-foreground">{stop.teaser}</span>
-              </li>
-            ))
-          }
-        </ol>
-      </nav>
-
-      <div class="mt-10">
-        <section aria-labelledby="choosing-car" class="story-section">
-          <p class="section-marker">01 · Research</p>
-          <h2 id="choosing-car" class="text-3xl font-bold text-foreground">Choosing the car</h2>
-          <p>
-            I wanted a practical vehicle with a specific driver-assistance feature for regular
-            motorway travel. The manufacturer's Australian material and the dealership listing
-            appeared consistent, so I booked a test drive of the advertised variant.
+      <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start lg:gap-12">
+        <nav aria-label="Table of contents" class="toc-nav sticky top-24 hidden lg:order-2 lg:mt-10 lg:grid">
+          <p class="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+            On this page
           </p>
+          {toc.map((item) => <a href={item.href} class="toc-link">{item.label}</a>)}
+          <a href="#main-content" class="toc-top">Back to top ↑</a>
+        </nav>
 
-          <figure class="mt-8">
-            <div class="exhibit-photo">
-              <span class="font-mono text-xs leading-relaxed tracking-wide text-muted-foreground">
-                EXHIBIT — the dealership listing<br />viewed 3 February 2026
-              </span>
-            </div>
-            <figcaption class="mt-2 text-sm leading-6 text-muted-foreground">
-              The listing as viewed on 3 February 2026. I did not save a screenshot at the time —
-              the first gap in my own record, and one of the checks I revisit below.
-            </figcaption>
-          </figure>
-
-          <p>
-            During the appointment, I recall asking whether the test vehicle's equipment matched the
-            car being offered. My recollection is that it did. I did not ask for that answer to be
-            repeated in writing before paying the deposit — <a
-              href="/guides#before-deposit"
-              class="editorial-link">this is the check I now wish I had made</a
-            >.
-          </p>
-        </section>
-
-        <section aria-labelledby="signing" class="story-section">
-          <p class="section-marker">02 · Evidence</p>
-          <h2 id="signing" class="text-3xl font-bold text-foreground">
-            What the paperwork recorded
-          </h2>
-          <p>
-            The contract stated the model, variant, colour and drive-away price. It did not name the
-            feature at issue. That distinction matters: the written document is clear about what it
-            contains, while my account of the conversation is necessarily a recollection.
-          </p>
-
-          <div class="editorial-card mt-8">
-            <p class="text-xs font-semibold uppercase tracking-wide text-primary">
-              Order form — special conditions field
-            </p>
-            <div
-              class="mt-3 border border-dashed border-border bg-background p-4 font-mono text-sm leading-relaxed text-foreground"
-            >
-              Variant: as advertised<br />
-              Colour: as advertised<br />
-              Drive-away price: as agreed<br />
-              Special conditions: <span class="text-muted-foreground">— left blank —</span>
-            </div>
-            <p class="mt-3 text-sm leading-6 text-muted-foreground">
-              The one field that could have settled the dispute in writing was never filled in, and
-              nobody at the signing suggested it should be.
-            </p>
-          </div>
-
-          <details class="editorial-details">
-            <summary>What I checked, and what I missed</summary>
-            <p>
-              I checked the total price, expected delivery month and trade-in allowance. I did not
-              compare each advertised feature against the order, nor add the feature as a special
-              condition. The practical lesson is to treat any feature that affects the decision as a
-              written term, however routine it may sound.
-            </p>
+        <div class="min-w-0 lg:order-1">
+          <details class="editorial-details mt-8 lg:hidden">
+            <summary>On this page</summary>
+            <nav aria-label="Table of contents" class="toc-nav mt-4">
+              {toc.map((item) => <a href={item.href} class="toc-link">{item.label}</a>)}
+              <a href="#main-content" class="toc-top">Back to top ↑</a>
+            </nav>
           </details>
-        </section>
 
-        <section aria-labelledby="handover" class="story-section">
-          <p class="section-marker">03 · Handover</p>
-          <h2 id="handover" class="text-3xl font-bold text-foreground">Collection and discovery</h2>
-          <p>
-            The car appeared clean and undamaged at delivery. The handover focused on keys, phone
-            pairing and servicing, and I signed the delivery documents after a short walk-around.
-            Later that day, while setting up the assistance systems, I found the expected control
-            and menu option were absent.
-          </p>
-          <p>
-            I contacted Northvale Motors the next morning. Before accepting a future vehicle, I
-            would use <a href="/guides#delivery-inspection" class="editorial-link"
-              >a written delivery inspection covering every paid-for feature</a
-            >, not only visible condition.
-          </p>
-        </section>
-
-        <section aria-labelledby="response" class="story-section">
-          <p class="section-marker">04 · Follow-up</p>
-          <h2 id="response" class="text-3xl font-bold text-foreground">The response so far</h2>
-          <p>
-            The first telephone response was courteous and non-committal. I was told the
-            specification would be checked. I then sent a concise written chronology with the
-            advertisement screenshot, order and contract so there would be one record of the issue.
-          </p>
-
-          <div class="editorial-card mt-8">
-            <p class="text-xs font-semibold uppercase tracking-wide text-primary">
-              Email to Northvale Motors — 2 April 2026
+          <section aria-labelledby="collection" class="story-section">
+            <p class="section-marker">Collection</p>
+            <h2 id="collection" class="text-3xl font-bold text-foreground">Collection day</h2>
+            <p>
+              I collected my first car, a brand-new 2026 Haval Jolion Vanta, from McCarroll's GWM
+              in Artarmon in May 2026. At collection, we found two dents on the rear passenger
+              door, a deep scratch above the driver's door handle and a paint stain on the bonnet.
+              Protective wrapping was also trapped between a door's rubber seal and frame.
             </p>
-            <div
-              class="mt-3 border border-border bg-background p-4 font-mono text-sm leading-relaxed text-foreground"
-            >
-              <span class="text-muted-foreground">Subject:</span> Formal complaint — feature discrepancy
-              on delivery<br /><br />
-              I am writing to formally record that the driver-assistance feature discussed before purchase
-              was not present on the car collected on 12 March. Please confirm in writing whether Northvale
-              Motors accepts this account, and what remedy is proposed. I would appreciate a response
-              within ten business days.
+            <p>
+              We reported the problems immediately. What followed was a series of repair visits,
+              assurances and changing offers that left us with an unresolved scratch and little
+              confidence in another attempt. Before accepting a car this way, I would now use{" "}
+              <a href="/guides#delivery-inspection" class="editorial-link"
+                >a written delivery inspection covering condition, not only the paperwork</a
+              >.
+            </p>
+          </section>
+
+          <section aria-labelledby="dents-fixed" class="story-section">
+            <p class="section-marker">First repair</p>
+            <h2 id="dents-fixed" class="text-3xl font-bold text-foreground">
+              The dents were fixed. The scratch wasn't.
+            </h2>
+            <p>
+              The first repair visit took place around June. The dealership kept the car for
+              approximately three days and successfully removed the two dents and the bonnet
+              stain.
+            </p>
+            <p><strong>The driver's door scratch remained.</strong></p>
+            <p>
+              We raised it again and arranged a second visit, approximately two weeks later. The
+              car went back for another three days. Before collecting it, we contacted the
+              dealership to check that the work was complete. We were assured, once again, that
+              the damage had been fixed.
+            </p>
+          </section>
+
+          <section aria-labelledby="second-collection" class="story-section">
+            <p class="section-marker">Second repair</p>
+            <h2 id="second-collection" class="text-3xl font-bold text-foreground">
+              “Fixed”—until we saw the car
+            </h2>
+            <div class="editorial-card mt-8">
+              <p class="text-xs font-semibold uppercase tracking-wide text-primary">
+                At the second collection
+              </p>
+              <div
+                class="mt-3 border border-dashed border-border bg-background p-4 font-mono text-sm leading-relaxed text-foreground"
+              >
+                Dents: repaired<br />
+                Bonnet stain: repaired<br />
+                Driver's door scratch: <span class="text-muted-foreground">touch-up applied, damage still visible</span>
+              </div>
+              <p class="mt-3 text-sm leading-6 text-muted-foreground">
+                The scratch still had not been properly repaired. Touch-up paint appeared to have
+                been applied, but to us, the finish looked worse than before.
+              </p>
             </div>
-            <p class="mt-3 text-sm leading-6 text-muted-foreground">
-              The requested response date passed without a substantive reply. This message, and the
-              acknowledgement that followed it, are the only written positions either side has put
-              on record.
-            </p>
-          </div>
 
-          <p class="mt-8">
-            Northvale Motors has confirmed receipt but has not provided its account of the pre-sale
-            discussion or a proposed resolution. That is the position as at the date above; I will
-            update this page if the material facts change.
-          </p>
-        </section>
-      </div>
+            <p class="mt-8">
+              A sales manager offered two services, which he valued at approximately
+              $400–$500, instead of further repairing the door. We had brought the car back
+              to have the damage fixed. An offer of servicing left that problem unresolved.
+            </p>
+            <p>
+              The manager then explained that a proper repair would require removing and
+              repainting the driver's door. As we recall it, he gave that explanation without
+              looking at the damaged area during the conversation. He said words to the effect of
+              “I'm not going to paint this,” before walking away.
+            </p>
+          </section>
+
+          <section aria-labelledby="two-attempts" class="story-section">
+            <p class="section-marker">The explanation</p>
+            <h2 id="two-attempts" class="text-3xl font-bold text-foreground">
+              Why did it take two attempts to explain the repair?
+            </h2>
+            <p>
+              That conversation left us with an obvious question: if the door needed repainting,
+              why hadn't that been explained before we were told it was fixed? The dealership had
+              arranged repairs, removed the other damage and attempted to touch up the scratch. We
+              expected that work to involve assessing what was needed.
+            </p>
+            <p>
+              We do not know when the dealership decided repainting was necessary. But we had not
+              been given that explanation before two repair visits and repeated assurances that
+              the problem was resolved. Instead, we were learning about the required work at the
+              same time we were being told the manager would not authorise it. An honest, clear
+              discussion at the outset could have saved considerable time and frustration.
+            </p>
+          </section>
+
+          <section aria-labelledby="ncat-offer" class="story-section">
+            <p class="section-marker">Escalation</p>
+            <h2 id="ncat-offer" class="text-3xl font-bold text-foreground">
+              After we raised NCAT, the offer changed
+            </h2>
+            <p>
+              We continued pursuing the issue through emails and text messages. After we said we
+              intended to take the matter to the NSW Civil and Administrative Tribunal (NCAT), the
+              dealership offered to repaint the driver's door and provide three services. At that
+              stage, it also identified a panel shop that we were told had experience with
+              European vehicles.
+            </p>
+            <p>
+              This was an offer to carry out further repairs. By then, however, our confidence had
+              deteriorated. Twice, we had left the car for repairs. Twice, we had been told the
+              issue was fixed. What we saw at collection did not match those assurances. We wanted
+              to know why another attempt would deliver a different result — and why this
+              repair option had not been clearly presented earlier.
+            </p>
+          </section>
+
+          <section aria-labelledby="why-declined" class="story-section">
+            <p class="section-marker">Our decision</p>
+            <h2 id="why-declined" class="text-3xl font-bold text-foreground">
+              Why we didn't accept repainting and three services
+            </h2>
+            <p>
+              Our concern extended beyond getting paint onto the door. I had bought a new car that
+              arrived with damage. After two unsuccessful attempts to repair the scratch, we no
+              longer felt confident in the dealership's handling of the work.
+            </p>
+            <p>
+              We were also concerned about whether the damage and repainting would affect the
+              car's resale value. We asked for compensation for that potential loss; the amount,
+              if any, remains disputed. The offer of repainting and three services did not resolve
+              those concerns, and further correspondence has prolonged the process without
+              producing an agreement.
+            </p>
+          </section>
 
       <section aria-labelledby="timeline-heading" class="story-section">
-        <p class="section-marker">05 · Documented chronology</p>
+        <p class="section-marker">Documented chronology</p>
         <h2 id="timeline-heading" class="mt-3 text-3xl font-bold text-foreground">The timeline</h2>
-        <ol class="timeline mt-10">
+        <ol class="mt-10 border-t border-border">
           {
-            timeline.map((item, index) => (
-              <li id={item.id} class="timeline-item">
-                <div class="flex flex-wrap gap-x-3 text-sm font-semibold text-primary">
-                  <time datetime={item.date.includes("September") ? "2026-09-17" : undefined}>
+            timeline.map((item) => (
+              <li
+                id={item.id}
+                class="grid gap-2 border-b border-border py-6 sm:grid-cols-[12rem_minmax(0,1fr)] sm:gap-8"
+              >
+                <div>
+                  <time
+                    class="block text-sm font-semibold text-primary"
+                    datetime={item.date.startsWith("25 September") ? "2026-09-25" : undefined}
+                  >
                     {item.date}
                   </time>
-                  <span aria-hidden="true">·</span>
-                  <span>{item.location}</span>
-                </div>
-                <h3 class="mt-2 text-lg font-bold text-foreground">
-                  <a href={`#${item.id}`} class="no-underline hover:text-primary">
+                  <p class="mt-1 text-sm text-muted-foreground">{item.location}</p>
+                  <a
+                    href={`#${item.id}`}
+                    class="mt-2 block font-bold leading-snug text-foreground no-underline hover:text-primary"
+                  >
                     {item.title}
                   </a>
-                </h3>
-                <p class="mt-2 text-muted-foreground">{item.text}</p>
-                {index < timeline.length - 1 && (
-                  <p class="mt-2 text-sm italic text-muted-foreground">What this led to ↓</p>
-                )}
+                </div>
+                <p class="text-muted-foreground">{item.text}</p>
               </li>
             ))
           }
         </ol>
+      </section>
+
+      <section aria-labelledby="dispute-status" class="story-section">
+        <p class="section-marker">Where things stand now</p>
+        <h2 id="dispute-status" class="text-3xl font-bold text-foreground">
+          Where the dispute stands
+        </h2>
+        <p>At the time of writing:</p>
+        <ul class="mt-4 list-disc space-y-2 pl-5 marker:text-primary">
+          <li>The driver's door scratch has not been satisfactorily repaired.</li>
+          <li>Some protective wrapping remains trapped.</li>
+          <li>
+            The dealership's latest offer remains repainting the driver's door plus three
+            services.
+          </li>
+          <li>An NCAT hearing is yet to be scheduled.</li>
+        </ul>
+        <p class="mt-6">
+          McCarroll's repaired the dents and bonnet stain. Our complaint concerns the remaining
+          scratch, the way the repair process was handled and the difficulty of reaching an
+          acceptable resolution. Following every assurance with{" "}
+          <a href="/guides#document-records" class="editorial-link">a same-day written summary</a>
+          {" "}is the one change that would have made this record far easier to stand behind.
+        </p>
       </section>
 
       <section aria-labelledby="differently" class="story-section story-section-emphasis">
-        <p class="section-marker">06 · Practical lesson</p>
+        <p class="section-marker">What I'd do differently</p>
         <h2 id="differently" class="text-3xl font-bold text-foreground">
-          What I would do differently
+          A first car shouldn't start like this
         </h2>
         <p>
-          Nothing in this account required expertise to avoid. Four changes would have prevented all
-          of it, and each costs a delay rather than money.
+          What frustrated us most was the gap between being told the damage was fixed and seeing
+          that it wasn't. We wanted the necessary work explained clearly and completed properly.
+          Instead, a problem identified on collection day led to two repair visits, repeated
+          follow-ups and a dispute that remains unresolved.
         </p>
         <ol class="mt-6 list-decimal space-y-3 pl-5 marker:font-bold marker:text-primary">
           <li>
-            <a href="/guides#before-deposit" class="editorial-link"
-              >Ask for every discussed feature in writing before paying a deposit</a
-            > — if it cannot be confirmed within a day, that is itself the answer.
-          </li>
-          <li>
-            <a href="/guides#contract-wording" class="editorial-link"
-              >Get the specification written into the contract as a special condition</a
-            >, in the words the listing used.
-          </li>
-          <li>
             <a href="/guides#delivery-inspection" class="editorial-link"
-              >Test every paid-for feature before signing the delivery record</a
-            >, not only visible condition.
+              >Inspect the car in good light before signing the delivery record</a
+            > — photograph every panel, not only the ones you expect to check.
+          </li>
+          <li>
+            <a href="/guides#repair-scope-writing" class="editorial-link"
+              >Ask for the scope of any repair in writing</a
+            > before the car goes back a second time, including whether a panel needs repainting
+            rather than touching up.
           </li>
           <li>
             <a href="/guides#document-records" class="editorial-link"
-              >Follow every material conversation with a dated email</a
-            > the same day, even when a phone call feels easier.
+              >Follow every assurance with a dated email or text the same day</a
+            >, especially "it's been fixed."
+          </li>
+          <li>
+            <a href="/guides#escalate-complaint" class="editorial-link"
+              >Know when to escalate to your state's consumer tribunal</a
+            > if repeated attempts haven't resolved the damage.
           </li>
         </ol>
         <p class="mt-8">
-          Those steps, and how to <a href="/guides#escalate-complaint" class="editorial-link"
-            >escalate if a dealership doesn't respond</a
-          >, are collected in the <a href="/guides" class="editorial-link"
-            >practical Australian car-buying guide</a
-          >.
+          I wanted to enjoy my first car. I did not expect to spend the months after collection
+          pursuing repairs to damage that was there from the start. If the car's value has been
+          reduced by the damage and repairs, we believe that is a fair matter for compensation
+          alongside having the damage properly repaired — which is now a question for NCAT to
+          decide. Those checks, and how to{" "}
+          <a href="/guides#not-as-described" class="editorial-link"
+            >understand your rights if a car isn't as described</a
+          >, are collected in the{" "}
+          <a href="/guides" class="editorial-link">practical Australian car-buying guide</a>.
         </p>
       </section>
+
+      <section aria-labelledby="fair-outcome" class="story-section">
+        <p class="section-marker">Over to you</p>
+        <h2 id="fair-outcome" class="text-3xl font-bold text-foreground">
+          What do you think is a fair outcome?
+        </h2>
+        <p>
+          We paid for a brand-new car but received one with several areas of damage. Having those
+          repaired is one part of the solution. Our concern is whether the damage and repairs
+          could also leave the car worth less.
+        </p>
+        <p>
+          If the car's value has been reduced, would it be fair to receive compensation for that
+          loss as well as having the damage properly repaired?
+        </p>
+        <p>
+          Have you faced something similar? If you'd like to share your experience or your view on
+          a fair outcome, the contact details are in the footer below and, as with this
+          account, please avoid naming individual employees.
+        </p>
+      </section>
+        </div>
+      </div>
     </article>
 
     <nav aria-label="Continue reading" class="onward-links">
       <p class="eyebrow">Continue reading</p>
       <div class="mt-5 flex flex-col items-start gap-4">
-        <a href="/guides#contract-wording" class="editorial-link"
-          >Check what your purchase contract should record</a
+        <a href="/guides#delivery-inspection" class="editorial-link"
+          >Check what to inspect before you accept a new car</a
         >
         <a href="/guides#escalate-complaint" class="editorial-link"
           >Follow the steps for escalating a dealer complaint</a
@@ -402,4 +446,35 @@ const stops = [
       </div>
     </nav>
   </main>
+
+  <script>
+    const navLinks = document.querySelectorAll<HTMLAnchorElement>(".toc-nav a.toc-link");
+    const sections = Array.from(
+      new Set(
+        Array.from(navLinks)
+          .map((link) => document.getElementById((link.getAttribute("href") ?? "").slice(1)))
+          .filter((el): el is HTMLElement => el !== null),
+      ),
+    );
+
+    if (sections.length && "IntersectionObserver" in window) {
+      const setActive = (id: string) => {
+        navLinks.forEach((link) => {
+          link.classList.toggle("toc-active", link.getAttribute("href") === `#${id}`);
+        });
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries.filter((entry) => entry.isIntersecting);
+          if (visible.length > 0) {
+            setActive(visible[0].target.id);
+          }
+        },
+        { rootMargin: "-15% 0px -70% 0px", threshold: 0 },
+      );
+
+      sections.forEach((section) => observer.observe(section));
+    }
+  </script>
 </BaseLayout>
