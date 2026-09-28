@@ -28,11 +28,12 @@ const imageURL = new URL(image, Astro.site);
 
 const navigation = [
   { href: "/", label: "Story" },
-  { href: "/reviews", label: "Reviews" },
-  { href: "/guides", label: "Buying guide" },
+  { href: "/reviews/", label: "Reviews" },
+  { href: "/guides/", label: "Buying guide" },
 ] as const;
 
-const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+// trailingSlash is "always", so every path ends in "/".
+const pathname = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -86,8 +87,7 @@ const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
             {
               navigation.map((item) => {
                 const isActive =
-                  pathname === item.href ||
-                  (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+                  item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
                 return (
                   <li>
                     <a

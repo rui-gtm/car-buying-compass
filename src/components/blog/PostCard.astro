@@ -8,7 +8,7 @@ interface Props {
 const { post } = Astro.props;
 const { title, description, topic, heroImage, heroImageAlt, author, publishDate } = post.data;
 const formattedDate = new Intl.DateTimeFormat("en-AU", { dateStyle: "medium" }).format(publishDate);
-const href = `/review/${post.id}`;
+const href = `/reviews/${post.id}/`;
 ---
 
 <!-- The title link is stretched over the whole card so image and text are

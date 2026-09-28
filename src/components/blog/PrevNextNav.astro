@@ -14,7 +14,7 @@ const { prev, next } = Astro.props;
     <nav aria-label="More Haval Jolion topics" class="stop-nav mt-16 grid gap-6 sm:grid-cols-2">
       <div>
         {prev && (
-          <a href={`/review/${prev.id}`} class="stop-link block">
+          <a href={`/reviews/${prev.id}/`} class="stop-link block">
             <span class="block text-xs font-bold uppercase tracking-wide text-muted-foreground">
               ← Previous
             </span>
@@ -24,7 +24,7 @@ const { prev, next } = Astro.props;
       </div>
       <div class="sm:text-right">
         {next && (
-          <a href={`/review/${next.id}`} class="stop-link block">
+          <a href={`/reviews/${next.id}/`} class="stop-link block">
             <span class="block text-xs font-bold uppercase tracking-wide text-muted-foreground">
               Next →
             </span>
