@@ -7,48 +7,16 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
 );
 
-// The owner review leads the section as a featured card; the rest of the
-// series follows it, newest first.
-const featured = posts.find((post) => post.data.tags.includes("owner-review"));
-const seriesPosts = posts.filter((post) => post !== featured);
-
-const assessment = [
-  {
-    stage: "Delivery",
-    anchor: "collection",
-    rating: "Poor",
-    text: "The car arrived with two dents, a scratch above the driver's door handle and a paint stain on the bonnet. The damage was visible immediately and reported on the spot.",
-  },
-  {
-    stage: "First repair",
-    anchor: "dents-fixed",
-    rating: "Adequate",
-    text: "The dents and bonnet stain were fixed within about three days. The driver's door scratch was not resolved, and no explanation was given at the time about what further work it might need.",
-  },
-  {
-    stage: "Second repair",
-    anchor: "second-collection",
-    rating: "Poor",
-    text: "The car went back for another three days and was returned with the scratch still visible. To us, the touch-up paint applied looked worse than before.",
-  },
-  {
-    stage: "Communication",
-    anchor: "two-attempts",
-    rating: "Poor",
-    text: "A sales manager offered two services instead of repairing the door, then said it needed repainting, an explanation we hadn't heard before, despite two repair visits and repeated assurances that the damage was fixed.",
-  },
-  {
-    stage: "Complaint handling",
-    anchor: "ncat-offer",
-    rating: "Poor",
-    text: "McCarroll's offer to repaint the door and provide three services only followed notice of an NCAT claim. The offer has not resolved the dispute, and a hearing is yet to be scheduled.",
-  },
-];
+// Lower-cased text each card is matched against by the hero search box.
+const searchText = (post: (typeof posts)[number]) =>
+  [post.data.title, post.data.description, post.data.topic, ...post.data.tags]
+    .join(" ")
+    .toLowerCase();
 ---
 
 <BaseLayout
   title="Independent Vehicle Reviews | My McCarroll's Account"
-  description="Practical Australian-market vehicle reviews and a separate stage-by-stage dealership assessment by the author."
+  description="Practical Australian-market vehicle reviews and a stage-by-stage dealership assessment by the author, all searchable in one place."
 >
   <main id="main-content">
     <article class="mx-auto max-w-6xl px-4 pb-8 pt-16 sm:px-6 sm:pt-24">
@@ -58,87 +26,41 @@ const assessment = [
           Vehicle reviews, kept separate from the dealership
         </h1>
         <p class="mt-6 text-xl leading-8 text-muted-foreground">
-          The cars are assessed on their own merits. The company's conduct is evaluated separately,
-          stage by stage.
+          Owner reviews, buying guides and a stage-by-stage dealership assessment, based on test
+          drives and everyday use in Australia.
         </p>
+        <form role="search" class="mt-8" action="/reviews" method="get">
+          <label for="review-search" class="sr-only">Search reviews</label>
+          <input
+            id="review-search"
+            type="search"
+            name="q"
+            autocomplete="off"
+            placeholder="Search reviews, e.g. safety, price, dealership"
+            class="h-12 w-full border border-input bg-background px-4 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:outline-none"
+          />
+        </form>
+        <p id="review-search-status" class="sr-only" aria-live="polite"></p>
       </header>
 
-      <section aria-labelledby="vehicle-reviews" class="mt-20">
-        <div class="max-w-reading">
-          <p class="eyebrow">Section A</p>
-          <h2 id="vehicle-reviews" class="mt-3 text-3xl font-bold text-foreground">
-            Vehicle reviews
-          </h2>
-          <p class="mt-4 text-muted-foreground">
-            Independent Australian-market observations by the author, based on test drives and
-            everyday use: an owner review of the 2026 Haval Jolion Vanta, followed by a growing
-            series of focused posts on price, variants, safety and more.
+      {
+        posts.length > 0 ? (
+          <div class="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post) => (
+              <div data-review-card data-search={searchText(post)} class="grid">
+                <PostCard post={post} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p class="mt-14 text-muted-foreground">
+            The first reviews are on their way — check back soon.
           </p>
-          <p class="mt-5">
-            <a href="/#collection" class="editorial-link"
-              >See the condition the car was in at collection</a
-            >.
-          </p>
-        </div>
-        {
-          featured && (
-            <article class="editorial-card mt-10">
-              <p class="section-marker">{featured.data.topic}</p>
-              <p class="mt-2 text-sm font-semibold text-primary">2026 · Vanta</p>
-              <h3 class="mt-2 text-2xl font-bold text-foreground">
-                <a href={`/blog/${featured.id}`} class="no-underline hover:text-primary">
-                  {featured.data.title}
-                </a>
-              </h3>
-              <p class="mt-4 font-semibold leading-7 text-foreground">
-                Easy to live with: sharp-looking, spacious and comfortable around Sydney, though
-                some of its "helpful" technology can become very unhelpful.
-              </p>
-              <p class="mt-4 text-muted-foreground">{featured.data.description}</p>
-              <p class="mt-5">
-                <a href={`/blog/${featured.id}`} class="editorial-link">Read the full owner review</a>
-              </p>
-            </article>
-          )
-        }
-        <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {seriesPosts.map((post) => <PostCard post={post} />)}
-        </div>
-      </section>
-
-      <section aria-labelledby="dealership-assessment" class="mt-24">
-        <div class="max-w-reading">
-          <p class="eyebrow">Section B</p>
-          <h2 id="dealership-assessment" class="mt-3 text-3xl font-bold text-foreground">
-            Dealership assessment: McCarroll's GWM Artarmon
-          </h2>
-          <p class="mt-4 text-muted-foreground">
-            This assessment concerns the author's transaction and complaint. It is not a rating of
-            the vehicles reviewed above.
-          </p>
-          <p class="mt-5">
-            <a href="/" class="editorial-link"
-              >Read the full chronological account of what occurred</a
-            >.
-          </p>
-        </div>
-        <div class="mt-10 grid gap-4">
-          {
-            assessment.map((item, index) => (
-              <article class="assessment-block grid gap-3 md:grid-cols-[3rem_12rem_8rem_1fr] md:items-center md:gap-6">
-                <p class="section-marker mb-0!">{String(index + 1).padStart(2, "0")}</p>
-                <h3 class="text-lg font-bold text-foreground">
-                  <a href={`/#${item.anchor}`} class="no-underline hover:text-primary">
-                    {item.stage}
-                  </a>
-                </h3>
-                <p class="font-semibold text-primary">{item.rating}</p>
-                <p class="max-w-reading text-muted-foreground">{item.text}</p>
-              </article>
-            ))
-          }
-        </div>
-      </section>
+        )
+      }
+      <p id="review-search-empty" class="mt-14 text-muted-foreground" hidden>
+        No reviews match that search. Try a broader term, such as "Jolion" or "price".
+      </p>
     </article>
 
     <nav aria-label="Continue reading" class="onward-links">
@@ -151,3 +73,40 @@ const assessment = [
     </nav>
   </main>
 </BaseLayout>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>("#review-search");
+  const status = document.querySelector<HTMLElement>("#review-search-status");
+  const empty = document.querySelector<HTMLElement>("#review-search-empty");
+  const cards = [...document.querySelectorAll<HTMLElement>("[data-review-card]")];
+
+  // Every word typed must appear somewhere in the card's title, description,
+  // topic or tags. The query is mirrored to ?q= so filtered views can be shared.
+  function applySearch(query: string) {
+    const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+    let visible = 0;
+    for (const card of cards) {
+      const text = card.dataset.search ?? "";
+      const match = terms.every((term) => text.includes(term));
+      card.hidden = !match;
+      if (match) visible++;
+    }
+    if (status) status.textContent = terms.length ? `${visible} of ${cards.length} match` : "";
+    if (empty) empty.hidden = visible > 0 || cards.length === 0;
+
+    const url = new URL(window.location.href);
+    if (query.trim()) url.searchParams.set("q", query.trim());
+    else url.searchParams.delete("q");
+    history.replaceState(null, "", url);
+  }
+
+  if (input) {
+    input.value = new URLSearchParams(window.location.search).get("q") ?? "";
+    applySearch(input.value);
+    input.addEventListener("input", () => applySearch(input.value));
+    input.form?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      applySearch(input.value);
+    });
+  }
+</script>
