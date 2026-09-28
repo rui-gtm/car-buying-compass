@@ -4,21 +4,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PostCard from "../components/blog/PostCard.astro";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => a.data.topicNumber - b.data.topicNumber,
+  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
 );
 
-const vehicles = [
-  {
-    name: "Haval Jolion",
-    year: "2026",
-    variant: "Vanta",
-    verdict:
-      "A well-equipped, keenly priced small SUV — worth test driving carefully and inspecting closely at delivery.",
-    body: "The Vanta trim brings a distinctive blacked-out look and a generous features list for its price point, with the kind of standard equipment that competitors often reserve for higher grades. On test drives, the cabin feels modern and the controls are easy to learn.",
-    detail:
-      "Our own car was delivered with visible panel damage, so beyond the usual test-drive checks, insist on inspecting every panel in good light at collection before signing anything. Read the full account of what we found at delivery.",
-  },
-];
+// The owner review leads the section as a featured card; the rest of the
+// series follows it, newest first.
+const featured = posts.find((post) => post.data.tags.includes("owner-review"));
+const seriesPosts = posts.filter((post) => post !== featured);
 
 const assessment = [
   {
@@ -79,7 +71,8 @@ const assessment = [
           </h2>
           <p class="mt-4 text-muted-foreground">
             Independent Australian-market observations by the author, based on test drives and
-            everyday use.
+            everyday use: an owner review of the 2026 Haval Jolion Vanta, followed by a growing
+            series of focused posts on price, variants, safety and more.
           </p>
           <p class="mt-5">
             <a href="/#collection" class="editorial-link"
@@ -87,46 +80,35 @@ const assessment = [
             >.
           </p>
         </div>
-        <div class="mt-10 grid gap-6">
-          {
-            vehicles.map((vehicle, index) => (
-              <article class="editorial-card">
-                <p class="section-marker">Vehicle {String(index + 1).padStart(2, "0")}</p>
-                <p class="mt-2 text-sm font-semibold text-primary">
-                  {vehicle.year} · {vehicle.variant}
-                </p>
-                <h3 class="mt-2 text-2xl font-bold text-foreground">{vehicle.name}</h3>
-                <p class="mt-4 font-semibold leading-7 text-foreground">{vehicle.verdict}</p>
-                <p class="mt-4 text-muted-foreground">{vehicle.body}</p>
-                <details class="editorial-details mt-5">
-                  <summary>Practical considerations</summary>
-                  <p>{vehicle.detail}</p>
-                </details>
-              </article>
-            ))
-          }
-        </div>
-      </section>
-
-      <section aria-labelledby="in-depth-reviews" class="mt-24">
-        <div class="max-w-reading">
-          <p class="eyebrow">Section B</p>
-          <h2 id="in-depth-reviews" class="mt-3 text-3xl font-bold text-foreground">
-            In-depth Jolion review series
-          </h2>
-          <p class="mt-4 text-muted-foreground">
-            A growing series covering price and deals, variant selection, safety and more, each
-            topic answered in one focused post.
-          </p>
-        </div>
-        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post) => <PostCard post={post} />)}
+        {
+          featured && (
+            <article class="editorial-card mt-10">
+              <p class="section-marker">{featured.data.topic}</p>
+              <p class="mt-2 text-sm font-semibold text-primary">2026 · Vanta</p>
+              <h3 class="mt-2 text-2xl font-bold text-foreground">
+                <a href={`/blog/${featured.id}`} class="no-underline hover:text-primary">
+                  {featured.data.title}
+                </a>
+              </h3>
+              <p class="mt-4 font-semibold leading-7 text-foreground">
+                Easy to live with: sharp-looking, spacious and comfortable around Sydney, though
+                some of its "helpful" technology can become very unhelpful.
+              </p>
+              <p class="mt-4 text-muted-foreground">{featured.data.description}</p>
+              <p class="mt-5">
+                <a href={`/blog/${featured.id}`} class="editorial-link">Read the full owner review</a>
+              </p>
+            </article>
+          )
+        }
+        <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {seriesPosts.map((post) => <PostCard post={post} />)}
         </div>
       </section>
 
       <section aria-labelledby="dealership-assessment" class="mt-24">
         <div class="max-w-reading">
-          <p class="eyebrow">Section C</p>
+          <p class="eyebrow">Section B</p>
           <h2 id="dealership-assessment" class="mt-3 text-3xl font-bold text-foreground">
             Dealership assessment: McCarroll's GWM Artarmon
           </h2>

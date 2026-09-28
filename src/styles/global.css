@@ -340,7 +340,6 @@
   }
   & a:hover { color: var(--color-primary); }
   & a.toc-active { background: var(--color-secondary); color: var(--color-primary); font-weight: 650; }
-  & .toc-sub { margin-left: 1rem; }
   & .toc-top {
     border-top: 1px solid var(--color-border);
     color: var(--color-muted-foreground);

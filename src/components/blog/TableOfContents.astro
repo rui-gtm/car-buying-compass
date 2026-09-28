@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { headings, variant } = Astro.props;
-const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const items = headings.filter((h) => h.depth === 2);
 ---
 
 {
@@ -21,7 +21,7 @@ const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
       <summary>On this page</summary>
       <nav aria-label="Table of contents" class="toc-nav mt-4">
         {items.map((item) => (
-          <a href={`#${item.slug}`} class:list={[item.depth === 3 && "toc-sub"]}>
+          <a href={`#${item.slug}`}>
             {item.text}
           </a>
         ))}
@@ -35,7 +35,7 @@ const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
     <nav aria-label="Table of contents" class="toc-nav sticky top-24 hidden lg:grid">
       <p class="text-xs font-bold uppercase tracking-wide text-muted-foreground">On this page</p>
       {items.map((item) => (
-        <a href={`#${item.slug}`} class:list={[item.depth === 3 && "toc-sub"]}>
+        <a href={`#${item.slug}`}>
           {item.text}
         </a>
       ))}

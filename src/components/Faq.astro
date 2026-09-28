@@ -1,0 +1,42 @@
+---
+// An accordion FAQ list that can be dropped into any page or MDX post: pass an
+// array of { question, answer } pairs. Each item is a native <details>, so the
+// answers are always in the HTML (crawlable even while collapsed) and it works
+// without JavaScript. Also emits FAQPage structured data for search engines.
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items: FaqItem[];
+}
+
+const { items } = Astro.props;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: items.map(({ question, answer }) => ({
+    "@type": "Question",
+    name: question,
+    acceptedAnswer: { "@type": "Answer", text: answer },
+  })),
+};
+---
+
+<div class="mt-8">
+  {
+    items.map(({ question, answer }, index) => (
+      <details class:list={["editorial-details mt-0!", index > 0 && "border-t-0"]}>
+        <summary>{question}</summary>
+        <p>{answer}</p>
+      </details>
+    ))
+  }
+</div>
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")}
+/>
