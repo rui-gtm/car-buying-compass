@@ -27,7 +27,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const imageURL = new URL(image, Astro.site);
 
 const navigation = [
-  { href: "/", label: "Story" },
+  { href: "/review/", label: "Review" },
   { href: "/blog/", label: "Blog" },
   { href: "/faq/", label: "FAQ" },
 ] as const;
@@ -77,7 +77,7 @@ const pathname = Astro.url.pathname;
         class="mx-auto flex max-w-6xl flex-row items-center justify-between gap-2 px-4 py-4 sm:px-6"
       >
         <a
-          href="/"
+          href="/review/"
           class="w-fit max-w-[8rem] truncate py-2 text-sm font-semibold text-foreground no-underline sm:max-w-none"
         >
           My McCarroll's account
@@ -87,7 +87,7 @@ const pathname = Astro.url.pathname;
             {
               navigation.map((item) => {
                 const isActive =
-                  item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+                  pathname.startsWith(item.href);
                 return (
                   <li>
                     <a

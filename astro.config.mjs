@@ -14,6 +14,10 @@ export default defineConfig({
   // MDX powers the blog content collection so posts can mix markdown with
   // the layout components in src/components/blog (tables, cards, split
   // sections) without any client-side JS of their own.
+  // The story lives at /review/; the bare domain forwards there.
+  redirects: {
+    "/": "/review/",
+  },
   integrations: [react(), mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
