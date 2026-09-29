@@ -12,7 +12,7 @@ const blog = defineCollection({
     topic: z.string(),
     topicNumber: z.number().int().positive(),
     tags: z.array(z.string()).default([]),
-    // Path under /public, e.g. "/reviews/price-and-deal/hero.jpg". Leave unset
+    // Path under /public, e.g. "/blog/price-and-deal/hero.jpg". Leave unset
     // to show a placeholder box until a real photo is added.
     heroImage: z.string().optional(),
     heroImageAlt: z.string().optional(),
