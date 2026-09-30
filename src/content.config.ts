@@ -1,5 +1,6 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
+import { REVIEW_CATEGORIES } from "./lib/categories";
 
 // Each blog post is one .mdx file in src/content/blog/. `topicNumber` is the
 // post's position in the ~40-topic GWM Haval Jolion review plan and drives
@@ -12,6 +13,9 @@ const blog = defineCollection({
     topic: z.string(),
     topicNumber: z.number().int().positive(),
     tags: z.array(z.string()).default([]),
+    // The one filter chip this post appears under on the /blog/ listing; see
+    // src/lib/categories.ts.
+    category: z.enum(REVIEW_CATEGORIES),
     // Path under /public, e.g. "/blog/price-and-deal/hero.jpg". Leave unset
     // to show a placeholder box until a real photo is added.
     heroImage: z.string().optional(),
