@@ -73,6 +73,36 @@ const faqs = [
     storyId: "second-collection",
   },
 ];
+
+// Questions are shown in these groups, in this order, each as a closed
+// accordion item.
+const groups = [
+  {
+    title: "Before you sign",
+    ids: ["before-deposit", "contract-wording"],
+  },
+  {
+    title: "Collection and repairs",
+    ids: ["delivery-inspection", "repair-scope-writing"],
+  },
+  {
+    title: "Your rights and complaints",
+    ids: ["not-as-described", "escalate-complaint", "document-records"],
+  },
+].map((group) => ({
+  ...group,
+  items: group.ids.map((id) => faqs.find((faq) => faq.id === id)!),
+}));
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(({ question, answer, detail }) => ({
+    "@type": "Question",
+    name: question,
+    acceptedAnswer: { "@type": "Answer", text: `${answer} ${detail}` },
+  })),
+};
 ---
 
 <BaseLayout
@@ -80,47 +110,76 @@ const faqs = [
   description="Answer-first guidance on deposits, contracts, delivery checks, consumer rights, complaints and record-keeping when buying a car in Australia."
 >
   <main id="main-content">
-    <article class="mx-auto max-w-6xl px-4 pb-8 pt-16 sm:px-6 sm:pt-24">
-      <header>
-        <p class="eyebrow">Australian car buying guide</p>
-        <h1 class="mt-4 text-4xl font-bold leading-tight text-foreground sm:text-5xl">
-          Questions to answer before you sign or collect
-        </h1>
-        <p class="mt-6 text-xl leading-8 text-muted-foreground">
-          Direct answers first, followed by the detail worth checking before money or keys change
-          hands.
-        </p>
-      </header>
+    <header class="mx-auto max-w-6xl px-4 pb-14 pt-16 sm:px-6 sm:pb-16 sm:pt-24">
+      <p class="eyebrow">Australian car buying guide</p>
+      <h1 class="mt-4 text-4xl font-bold leading-tight text-foreground sm:text-5xl">
+        Questions to answer before you sign or collect
+      </h1>
+      <p class="mt-6 max-w-reading text-xl leading-8 text-muted-foreground">
+        Direct answers to the checks worth making before money or keys change hands, each linked to
+        what happened in the author's own purchase.
+      </p>
+    </header>
 
-      <div class="mt-16 grid gap-6">
+    <!-- Answers sit inside native <details>, so they are in the HTML (and the
+         FAQPage data below) even while collapsed, and open without JavaScript. -->
+    <div class="bg-secondary/60 px-4 py-14 sm:px-6 sm:py-16">
+      <div class="mx-auto grid max-w-3xl gap-14">
         {
-          faqs.map((faq, index) => (
-            <section id={faq.id} aria-labelledby={`${faq.id}-heading`} class="editorial-card">
-              <p class="section-marker">Check {String(index + 1).padStart(2, "0")}</p>
-              <h2 id={`${faq.id}-heading`} class="text-2xl font-bold leading-snug text-foreground">
-                {faq.question}
+          groups.map((group) => (
+            <section aria-labelledby={`group-${group.ids[0]}`}>
+              <h2 id={`group-${group.ids[0]}`} class="section-marker font-semibold">
+                {group.title}
               </h2>
-              <p class="mt-4 font-semibold leading-8 text-foreground">{faq.answer}</p>
-              <details class="editorial-details mt-5 border-t-0">
-                <summary>More detail</summary>
-                <p>{faq.detail}</p>
-              </details>
-              <p class="mt-5 text-sm leading-6 text-muted-foreground">
-                Why this matters:{" "}
-                <a href={`/review/#${faq.storyId}`} class="editorial-link">
-                  {faq.note}
-                </a>
-              </p>
+              <div class="border-b border-border">
+                {group.items.map((faq) => (
+                  <details id={faq.id} class="group border-t border-border first:border-t-0">
+                    <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-4 [&::-webkit-details-marker]:hidden">
+                      <h3 class="text-lg font-semibold leading-snug text-foreground group-hover:text-primary">
+                        {faq.question}
+                      </h3>
+                      <svg
+                        aria-hidden="true"
+                        class="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </summary>
+                    <div class="pb-6 pr-10">
+                      <p class="font-semibold leading-7 text-foreground">{faq.answer}</p>
+                      <p class="mt-3 leading-7 text-muted-foreground">{faq.detail}</p>
+                      <aside class="mt-5 border-l-2 border-primary bg-background px-4 py-3">
+                        <p class="eyebrow">Why this matters</p>
+                        <p class="mt-1.5 text-sm leading-6 text-foreground">{faq.note}</p>
+                        <a
+                          href={`/review/#${faq.storyId}`}
+                          class="editorial-link mt-2 inline-block text-sm"
+                        >
+                          Read this part of the review →
+                        </a>
+                      </aside>
+                    </div>
+                  </details>
+                ))}
+              </div>
             </section>
           ))
         }
       </div>
-    </article>
+    </div>
 
-    <nav aria-label="Continue reading" class="onward-links">
+    <nav aria-label="Continue reading" class="onward-links mt-0!">
       <p class="eyebrow">Continue reading</p>
       <div class="mt-5 flex flex-col items-start gap-4">
-        <a href="/review/" class="editorial-link">See how the checks apply in the author's full account</a>
+        <a href="/review/" class="editorial-link"
+          >See how the checks apply in the author's full account</a
+        >
         <a href="/blog/" class="editorial-link">Compare the independent vehicle reviews</a>
         <a href="/blog/mccarrolls-gwm-artarmon-dealership-assessment/" class="editorial-link"
           >Read the stage-by-stage dealership assessment</a
@@ -129,3 +188,23 @@ const faqs = [
     </nav>
   </main>
 </BaseLayout>
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")}
+/>
+
+<script>
+  // Links such as /faq/#delivery-inspection from the review page should land
+  // on that question already expanded.
+  function openFromHash() {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    const target = id ? document.getElementById(id) : null;
+    if (target instanceof HTMLDetailsElement) {
+      target.open = true;
+      target.scrollIntoView();
+    }
+  }
+  openFromHash();
+  window.addEventListener("hashchange", openFromHash);
+</script>
