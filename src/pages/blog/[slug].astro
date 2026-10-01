@@ -4,13 +4,33 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import TableOfContents from "../../components/blog/TableOfContents.astro";
 import PrevNextNav from "../../components/blog/PrevNextNav.astro";
 import RelatedPosts from "../../components/blog/RelatedPosts.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import { isDealershipReview } from "../../lib/categories";
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_URL,
+  breadcrumbList,
+  carEntity,
+  dealerEntity,
+  ids,
+  jolionRangeEntity,
+  pageTitle,
+  type Crumb,
+} from "../../lib/site";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
     (a, b) => a.data.topicNumber - b.data.topicNumber,
   );
 
-  return posts.map((post, index) => {
+  return posts.map((post) => {
+    // Prev/next stays within the post's own series: the dealership assessment
+    // is never threaded between the vehicle reviews, or vice versa.
+    const series = posts.filter(
+      (candidate) =>
+        isDealershipReview(candidate.data.category) === isDealershipReview(post.data.category),
+    );
+    const index = series.findIndex((candidate) => candidate.id === post.id);
     const sharedTagCount = (candidate: CollectionEntry<"blog">) =>
       candidate.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
 
@@ -23,8 +43,8 @@ export async function getStaticPaths() {
       params: { slug: post.id },
       props: {
         post,
-        prev: posts[index - 1] ?? null,
-        next: posts[index + 1] ?? null,
+        prev: series[index - 1] ?? null,
+        next: series[index + 1] ?? null,
         related,
       },
     };
@@ -33,32 +53,72 @@ export async function getStaticPaths() {
 
 const { post, prev, next, related } = Astro.props;
 const { Content, headings } = await render(post);
-const { title, description, topic, heroImage, heroImageAlt, publishDate, updatedDate } = post.data;
+const { title, seoTitle, description, topic, category, tags, heroImage, heroImageAlt, author, publishDate, updatedDate } =
+  post.data;
 
-const formattedDate = new Intl.DateTimeFormat("en-AU", { dateStyle: "long" }).format(publishDate);
+const formatDate = (date: Date) => new Intl.DateTimeFormat("en-AU", { dateStyle: "long" }).format(date);
+const isDealership = isDealershipReview(category);
+const url = new URL(`/blog/${post.id}/`, SITE_URL).href;
+
+const crumbs: Crumb[] = [
+  { name: "Home", path: "/" },
+  { name: "Blog", path: "/blog/" },
+  { name: title, path: `/blog/${post.id}/` },
+];
+
+const schema = [
+  {
+    "@type": "BlogPosting",
+    "@id": `${url}#article`,
+    headline: title,
+    description,
+    image: new URL(heroImage ?? DEFAULT_OG_IMAGE, SITE_URL).href,
+    datePublished: publishDate.toISOString(),
+    dateModified: (updatedDate ?? publishDate).toISOString(),
+    inLanguage: "en-AU",
+    articleSection: category,
+    keywords: tags.join(", "),
+    author: { "@id": ids.author },
+    publisher: { "@id": ids.author },
+    isPartOf: { "@id": ids.website },
+    mainEntityOfPage: url,
+    // The car and the company are separate subjects: a dealership post is
+    // about McCarroll's and only mentions the car, and vice versa.
+    about: isDealership ? dealerEntity : tags.includes("vanta") ? carEntity : jolionRangeEntity,
+    mentions: isDealership ? carEntity : tags.includes("vanta") ? dealerEntity : undefined,
+  },
+  breadcrumbList(crumbs),
+];
 const wordCount = post.body?.trim().split(/\s+/).length ?? 0;
 const readMinutes = Math.max(1, Math.round(wordCount / 200));
 ---
 
 <BaseLayout
-  title={`${title} | GWM Haval Jolion Review`}
+  title={pageTitle(seoTitle ?? title)}
   description={description}
   ogType="article"
   image={heroImage}
+  imageAlt={heroImage ? heroImageAlt : undefined}
   publishedTime={publishDate.toISOString()}
-  modifiedTime={updatedDate?.toISOString()}
+  modifiedTime={(updatedDate ?? publishDate).toISOString()}
+  schema={schema}
 >
   <main id="main-content">
     <article class="mx-auto max-w-6xl px-4 pb-8 pt-16 sm:px-6 sm:pt-24">
       <header class="max-w-reading">
-        <p class="eyebrow">
-          <a href="/blog/" class="text-inherit no-underline hover:underline">GWM Haval Jolion review</a>
-          <span aria-hidden="true"> · </span>{topic}
-        </p>
+        <Breadcrumbs crumbs={[...crumbs.slice(0, -1), { ...crumbs[crumbs.length - 1], name: topic }]} />
         <h1 class="mt-4 text-4xl font-bold leading-tight text-foreground sm:text-5xl">{title}</h1>
         <p class="mt-6 text-xl leading-8 text-muted-foreground">{description}</p>
         <p class="mt-5 text-sm text-muted-foreground">
-          <time datetime={publishDate.toISOString()}>{formattedDate}</time>
+          By {author}
+          <span aria-hidden="true"> · </span>Published <time datetime={publishDate.toISOString()}>{formatDate(publishDate)}</time>
+          {
+            updatedDate && (
+              <>
+                <span aria-hidden="true"> · </span>Updated <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time>
+              </>
+            )
+          }
           <span aria-hidden="true"> · </span>{readMinutes} min read
         </p>
       </header>
@@ -89,7 +149,11 @@ const readMinutes = Math.max(1, Math.round(wordCount / 200));
         <TableOfContents headings={headings} variant="desktop" />
       </div>
 
-      <PrevNextNav prev={prev} next={next} />
+      <PrevNextNav
+        prev={prev}
+        next={next}
+        label={isDealership ? "More dealership reviews" : "More Haval Jolion reviews"}
+      />
       <RelatedPosts posts={related} />
     </article>
   </main>

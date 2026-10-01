@@ -22,3 +22,8 @@ export const categorySlug = (category: ReviewCategory) =>
     .replace(/&/g, "and")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
+
+// Dealership posts are kept apart from the vehicle reviews everywhere — title,
+// eyebrow, prev/next series and structured data — so a reader never mistakes
+// a rating of the company for a rating of the car.
+export const isDealershipReview = (category: ReviewCategory) => category === "Dealership review";

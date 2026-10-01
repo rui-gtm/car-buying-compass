@@ -1,10 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { pageTitle } from "../lib/site";
 ---
 
 <BaseLayout
-  title="Page not found | My Car-Buying Experience with McCarroll’s GWM Artarmon: What Happened"
+  title={pageTitle("Page not found")}
   description="The page you're looking for doesn't exist or has been moved."
+  noindex
 >
   <main id="main-content" class="flex min-h-[60vh] items-center justify-center bg-background px-4">
     <div class="max-w-md text-center">
@@ -15,7 +17,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </p>
       <div class="mt-6">
         <a
-          href="/review/"
+          href="/"
           class="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
         >
           Go home

@@ -2,7 +2,8 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostCard from "../../components/blog/PostCard.astro";
-import { REVIEW_CATEGORIES, categorySlug } from "../../lib/categories";
+import { REVIEW_CATEGORIES, categorySlug, isDealershipReview } from "../../lib/categories";
+import { SITE_URL, breadcrumbList, ids, pageTitle } from "../../lib/site";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
@@ -13,22 +14,72 @@ const searchText = (post: (typeof posts)[number]) =>
   [post.data.title, post.data.description, post.data.topic, post.data.category, ...post.data.tags]
     .join(" ")
     .toLowerCase();
+
+// Two H2 groups keep the company and the car visibly apart.
+const groups = [
+  {
+    id: "dealership-reviews",
+    title: "Dealership review: McCarroll's GWM Artarmon",
+    posts: posts.filter((post) => isDealershipReview(post.data.category)),
+  },
+  {
+    id: "vehicle-reviews",
+    title: "GWM Haval Jolion reviews",
+    posts: posts.filter((post) => !isDealershipReview(post.data.category)),
+  },
+].filter((group) => group.posts.length > 0);
+
+const title = "McCarroll's GWM Artarmon & Haval Jolion Owner Reviews";
+const description =
+  "My owner reviews of the 2026 GWM Haval Jolion Vanta and a stage-by-stage assessment of McCarroll's GWM Artarmon, from one purchase in Sydney.";
+const pageUrl = `${SITE_URL}/blog/`;
+const schema = [
+  {
+    "@type": "CollectionPage",
+    "@id": `${pageUrl}#page`,
+    url: pageUrl,
+    name: title,
+    description,
+    inLanguage: "en-AU",
+    isPartOf: { "@id": ids.website },
+    author: { "@id": ids.author },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: posts.map((post, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `${SITE_URL}/blog/${post.id}/`,
+        name: post.data.title,
+      })),
+    },
+  },
+  breadcrumbList([
+    { name: "Home", path: "/" },
+    { name: "Blog", path: "/blog/" },
+  ]),
+];
 ---
 
 <BaseLayout
-  title="Independent Vehicle Reviews | My Car-Buying Experience with McCarroll’s GWM Artarmon: What Happened"
-  description="Practical Australian-market vehicle reviews and a stage-by-stage dealership assessment by the author, all searchable in one place."
+  title={pageTitle(title)}
+  description={description}
+  schema={schema}
 >
   <main id="main-content">
     <article class="mx-auto max-w-6xl px-4 pb-8 pt-16 sm:px-6 sm:pt-24">
       <header class="max-w-reading">
-        <p class="eyebrow">Independent assessment</p>
+        <p class="eyebrow">Owner reviews</p>
         <h1 class="mt-4 text-4xl font-bold leading-tight text-foreground sm:text-5xl">
-          Vehicle reviews, kept separate from the dealership
+          McCarroll's GWM Artarmon and the Haval Jolion, reviewed separately
         </h1>
         <p class="mt-6 text-xl leading-8 text-muted-foreground">
-          Owner reviews, buying guides and a stage-by-stage dealership assessment, based on test
-          drives and everyday use in Australia.
+          I bought a new 2026 GWM Haval Jolion Vanta from McCarroll's GWM Artarmon in May 2026.
+          Everything here comes from that purchase and from driving the car around Sydney since.
+        </p>
+        <p class="mt-4 leading-7 text-muted-foreground">
+          The dealership and the car are reviewed separately: how McCarroll's handled delivery,
+          repairs and my complaint says nothing about how the Jolion drives, and the other way
+          round. I am not affiliated with McCarroll's or GWM and the site carries no advertising.
         </p>
         <form role="search" class="mt-8" action="/blog/" method="get">
           <label for="review-search" class="sr-only">Search reviews</label>
@@ -62,19 +113,26 @@ const searchText = (post: (typeof posts)[number]) =>
       </header>
 
       {
-        posts.length > 0 ? (
-          <div class="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => (
-              <div
-                data-review-card
-                data-search={searchText(post)}
-                data-category={categorySlug(post.data.category)}
-                class="grid"
-              >
-                <PostCard post={post} />
+        groups.length > 0 ? (
+          groups.map((group) => (
+            <section data-review-group aria-labelledby={group.id} class="mt-14">
+              <h2 id={group.id} class="text-2xl font-bold text-foreground">
+                {group.title}
+              </h2>
+              <div class="mt-6 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+                {group.posts.map((post) => (
+                  <div
+                    data-review-card
+                    data-search={searchText(post)}
+                    data-category={categorySlug(post.data.category)}
+                    class="grid"
+                  >
+                    <PostCard post={post} />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </section>
+          ))
         ) : (
           <p class="mt-14 text-muted-foreground">
             The first reviews are on their way — check back soon.
@@ -89,71 +147,76 @@ const searchText = (post: (typeof posts)[number]) =>
     <nav aria-label="Continue reading" class="onward-links">
       <p class="eyebrow">Continue reading</p>
       <div class="mt-5 flex flex-col items-start gap-4">
-        <a href="/review/" class="editorial-link"
+        <a href="/" class="editorial-link"
           >Follow the purchase from order to unresolved complaint</a
         >
         <a href="/faq/" class="editorial-link">Use the pre-deposit and delivery checklists</a>
       </div>
     </nav>
   </main>
-</BaseLayout>
 
-<script>
-  const input = document.querySelector<HTMLInputElement>("#review-search");
-  const status = document.querySelector<HTMLElement>("#review-search-status");
-  const empty = document.querySelector<HTMLElement>("#review-search-empty");
-  const cards = [...document.querySelectorAll<HTMLElement>("[data-review-card]")];
-  const chips = [...document.querySelectorAll<HTMLButtonElement>("[data-category-filter]")];
+  <script>
+    const input = document.querySelector<HTMLInputElement>("#review-search");
+    const status = document.querySelector<HTMLElement>("#review-search-status");
+    const empty = document.querySelector<HTMLElement>("#review-search-empty");
+    const cards = [...document.querySelectorAll<HTMLElement>("[data-review-card]")];
+    const chips = [...document.querySelectorAll<HTMLButtonElement>("[data-category-filter]")];
+    const groups = [...document.querySelectorAll<HTMLElement>("[data-review-group]")];
 
-  const params = new URLSearchParams(window.location.search);
-  let category = params.get("category") ?? "";
-  if (!chips.some((chip) => chip.dataset.categoryFilter === category)) category = "";
+    const params = new URLSearchParams(window.location.search);
+    let category = params.get("category") ?? "";
+    if (!chips.some((chip) => chip.dataset.categoryFilter === category)) category = "";
 
-  // A card shows when it is in the selected category (if any) and every word
-  // typed appears somewhere in its title, description, topic, category or
-  // tags. Both are mirrored to ?q= and ?category= so filtered views can
-  // be shared.
-  function applyFilters() {
-    const query = input?.value ?? "";
-    const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
-    let visible = 0;
-    for (const card of cards) {
-      const text = card.dataset.search ?? "";
-      const match =
-        (!category || card.dataset.category === category) &&
-        terms.every((term) => text.includes(term));
-      card.hidden = !match;
-      if (match) visible++;
+    // A card shows when it is in the selected category (if any) and every word
+    // typed appears somewhere in its title, description, topic, category or
+    // tags. Both are mirrored to ?q= and ?category= so filtered views can
+    // be shared.
+    function applyFilters() {
+      const query = input?.value ?? "";
+      const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+      let visible = 0;
+      for (const card of cards) {
+        const text = card.dataset.search ?? "";
+        const match =
+          (!category || card.dataset.category === category) &&
+          terms.every((term) => text.includes(term));
+        card.hidden = !match;
+        if (match) visible++;
+      }
+      // Hide a group's heading too when none of its cards match.
+      for (const group of groups) {
+        group.hidden = !group.querySelector("[data-review-card]:not([hidden])");
+      }
+      for (const chip of chips) {
+        chip.setAttribute("aria-pressed", String(chip.dataset.categoryFilter === category));
+      }
+      const filtered = terms.length > 0 || category !== "";
+      if (status) status.textContent = filtered ? `${visible} of ${cards.length} match` : "";
+      if (empty) empty.hidden = visible > 0 || cards.length === 0;
+
+      const url = new URL(window.location.href);
+      if (query.trim()) url.searchParams.set("q", query.trim());
+      else url.searchParams.delete("q");
+      if (category) url.searchParams.set("category", category);
+      else url.searchParams.delete("category");
+      history.replaceState(null, "", url);
     }
+
     for (const chip of chips) {
-      chip.setAttribute("aria-pressed", String(chip.dataset.categoryFilter === category));
+      chip.addEventListener("click", () => {
+        category = chip.dataset.categoryFilter ?? "";
+        applyFilters();
+      });
     }
-    const filtered = terms.length > 0 || category !== "";
-    if (status) status.textContent = filtered ? `${visible} of ${cards.length} match` : "";
-    if (empty) empty.hidden = visible > 0 || cards.length === 0;
 
-    const url = new URL(window.location.href);
-    if (query.trim()) url.searchParams.set("q", query.trim());
-    else url.searchParams.delete("q");
-    if (category) url.searchParams.set("category", category);
-    else url.searchParams.delete("category");
-    history.replaceState(null, "", url);
-  }
-
-  for (const chip of chips) {
-    chip.addEventListener("click", () => {
-      category = chip.dataset.categoryFilter ?? "";
-      applyFilters();
-    });
-  }
-
-  if (input) {
-    input.value = params.get("q") ?? "";
-    input.addEventListener("input", applyFilters);
-    input.form?.addEventListener("submit", (event) => {
-      event.preventDefault();
-      applyFilters();
-    });
-  }
-  applyFilters();
-</script>
+    if (input) {
+      input.value = params.get("q") ?? "";
+      input.addEventListener("input", applyFilters);
+      input.form?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        applyFilters();
+      });
+    }
+    applyFilters();
+  </script>
+</BaseLayout>

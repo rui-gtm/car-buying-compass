@@ -1,9 +1,89 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Faq from "../components/Faq.astro";
+import {
+  AUTHOR_NAME,
+  DEFAULT_OG_IMAGE,
+  SITE_URL,
+  STORY_MODIFIED,
+  STORY_PUBLISHED,
+  carEntity,
+  dealerEntity,
+  ids,
+} from "../lib/site";
 
-const timeline = [
+const title = "McCarroll's GWM Artarmon: My New Haval Arrived Damaged";
+const description =
+  "My first-hand account of buying a new 2026 Haval Jolion Vanta from McCarroll's GWM Artarmon, Sydney: damage at collection, two repair visits and an NCAT dispute.";
+const headline = "My car-buying experience with McCarroll's GWM Artarmon";
+
+const formatDate = (iso: string) =>
+  new Intl.DateTimeFormat("en-AU", { dateStyle: "long" }).format(new Date(iso));
+
+// Short, factual answers lifted from the account below — the block search
+// engines and AI answer engines are most likely to quote. Keep them in step
+// with the current-status box and the timeline.
+const quickAnswers = [
+  {
+    question: "What happened with my new car from McCarroll's GWM Artarmon?",
+    answer:
+      "I collected a brand-new 2026 Haval Jolion Vanta from McCarroll's GWM Artarmon in May 2026 and found two dents, a deep scratch above the driver's door handle, a paint stain on the bonnet and trapped protective wrapping on the day. After two repair visits in June 2026, the dents and stain were fixed but the scratch was not.",
+  },
+  {
+    question: "Has the dispute been resolved?",
+    answer:
+      "No. As of 25 September 2026, the driver's door scratch has not been satisfactorily repaired and an NCAT hearing is yet to be scheduled.",
+  },
+  {
+    question: "What has McCarroll's offered?",
+    answer:
+      "After the second repair, a sales manager offered two services, which he valued at about $400–$500, instead of further repairing the door. After we said we intended to go to NCAT, McCarroll's offered to repaint the driver's door and provide three services. That remains its latest offer.",
+  },
+  {
+    question: "Why haven't you accepted the offer to repaint the door?",
+    answer:
+      "Two repair visits had already ended with assurances that the damage was fixed when it wasn't, and the offer does not address our concern that the damage and repainting could reduce the car's resale value.",
+  },
+  {
+    question: "Has McCarroll's responded to this account?",
+    answer:
+      "Not yet. McCarroll's has not yet been invited to respond specifically to this account. Any response will be recorded on this page.",
+  },
+];
+
+const schema = [
+  {
+    "@type": "Article",
+    "@id": `${SITE_URL}/#article`,
+    headline,
+    description,
+    image: new URL(DEFAULT_OG_IMAGE, SITE_URL).href,
+    datePublished: STORY_PUBLISHED,
+    dateModified: STORY_MODIFIED,
+    inLanguage: "en-AU",
+    author: { "@id": ids.author },
+    publisher: { "@id": ids.author },
+    isPartOf: { "@id": ids.website },
+    mainEntityOfPage: `${SITE_URL}/`,
+    about: [dealerEntity, carEntity],
+    contentLocation: { "@type": "Place", name: "Artarmon, Sydney, NSW, Australia" },
+  },
+];
+
+interface TimelineItem {
+  id: string;
+  /** Machine-readable date for <time>; omitted where the date is approximate. */
+  datetime?: string;
+  date: string;
+  location: string;
+  title: string;
+  text: string;
+}
+
+const timeline: TimelineItem[] = [
   {
     id: "tl-collection",
+    datetime: "2026-05",
     date: "May 2026",
     location: "McCarroll's GWM, Artarmon",
     title: "The car arrives with damage",
@@ -11,6 +91,7 @@ const timeline = [
   },
   {
     id: "tl-repair-one",
+    datetime: "2026-06",
     date: "June 2026",
     location: "McCarroll's GWM, Artarmon",
     title: "First repair: two fixes, one left",
@@ -18,6 +99,7 @@ const timeline = [
   },
   {
     id: "tl-repair-two",
+    datetime: "2026-06",
     date: "June 2026, roughly two weeks later",
     location: "McCarroll's GWM, Artarmon",
     title: "Second repair, same assurance",
@@ -25,6 +107,7 @@ const timeline = [
   },
   {
     id: "tl-second-collection",
+    datetime: "2026-06",
     date: "June 2026",
     location: "McCarroll's GWM, Artarmon",
     title: "“Fixed”—until we saw the car",
@@ -32,6 +115,7 @@ const timeline = [
   },
   {
     id: "tl-manager-response",
+    datetime: "2026-06",
     date: "June 2026",
     location: "McCarroll's GWM, Artarmon",
     title: "“I'm not going to paint this”",
@@ -53,6 +137,7 @@ const timeline = [
   },
   {
     id: "tl-current",
+    datetime: "2026-09-25",
     date: "25 September 2026",
     location: "Ongoing",
     title: "Unresolved, awaiting a hearing",
@@ -75,25 +160,31 @@ const toc = [
 ---
 
 <BaseLayout
-  title="One customer's experience with McCarroll's."
-  description="A personal review of McCarroll's, documenting one customer's vehicle purchase, timeline, supporting evidence, company responses and latest outcome."
+  title={title}
+  description={description}
   ogType="article"
-  publishedTime="2026-07-01"
-  modifiedTime="2026-09-25"
+  publishedTime={STORY_PUBLISHED}
+  modifiedTime={STORY_MODIFIED}
+  schema={schema}
 >
   <main id="main-content">
     <article class="mx-auto max-w-6xl px-4 pb-8 pt-16 sm:px-6 sm:pt-24">
       <header>
         <p class="eyebrow">First-person account</p>
         <h1 class="mt-4 text-4xl font-bold leading-tight text-foreground sm:text-5xl">
-          My car-buying experience with McCarroll's GWM Artarmon
+          {headline}
         </h1>
         <p class="mt-6 text-xl leading-8 text-foreground">
           Two visits. Around six days back at the dealership. Repeated assurances that the damage
           was fixed. Yet the scratch on my brand-new Haval remained, and the dispute is now
           heading to an NCAT hearing.
         </p>
-        <p class="mt-5 text-sm leading-6 text-muted-foreground">
+        <p class="mt-5 text-sm text-muted-foreground">
+          By {AUTHOR_NAME}
+          <span aria-hidden="true"> · </span>Published <time datetime={STORY_PUBLISHED}>{formatDate(STORY_PUBLISHED)}</time>
+          <span aria-hidden="true"> · </span>Last updated <time datetime={STORY_MODIFIED}>{formatDate(STORY_MODIFIED)}</time>
+        </p>
+        <p class="mt-3 text-sm leading-6 text-muted-foreground">
           Disclosure: this is a customer account of one purchase, including our recollections of
           conversations. The dispute awaits an NCAT hearing. McCarroll's has not yet been invited
           to respond specifically to this article.
@@ -151,6 +242,13 @@ const toc = [
           once we raised the NSW Civil and Administrative Tribunal. This chronology records what
           happened at each visit, what we were told, and why we haven't accepted the latest offer.
         </p>
+
+        <section aria-labelledby="quick-answers" class="mt-10 max-w-reading">
+          <h2 id="quick-answers" class="text-sm font-bold uppercase tracking-wide text-muted-foreground">
+            Quick answers
+          </h2>
+          <Faq items={quickAnswers} />
+        </section>
       </header>
 
       <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start lg:gap-12">
@@ -317,7 +415,7 @@ const toc = [
                 <div>
                   <time
                     class="block text-sm font-semibold text-primary"
-                    datetime={item.date.startsWith("25 September") ? "2026-09-25" : undefined}
+                    datetime={item.datetime}
                   >
                     {item.date}
                   </time>
@@ -422,9 +520,9 @@ const toc = [
           loss as well as having the damage properly repaired?
         </p>
         <p>
-          Have you faced something similar? If you'd like to share your experience or your view on
-          a fair outcome, the contact details are in the footer below and, as with this
-          account, please avoid naming individual employees.
+          Have you faced something similar? If you share your own experience somewhere public,
+          such as a review site or forum, please keep to what happened to you and, as with this
+          account, avoid naming individual employees.
         </p>
       </section>
         </div>
@@ -440,8 +538,11 @@ const toc = [
         <a href="/faq/#escalate-complaint" class="editorial-link"
           >Follow the steps for escalating a dealer complaint</a
         >
+        <a href="/blog/mccarrolls-gwm-artarmon-dealership-assessment/" class="editorial-link"
+          >Read the stage-by-stage McCarroll's GWM Artarmon dealership assessment</a
+        >
         <a href="/blog/" class="editorial-link"
-          >Read the vehicle reviews and separate dealership assessment</a
+          >Read my Haval Jolion owner reviews</a
         >
       </div>
     </nav>

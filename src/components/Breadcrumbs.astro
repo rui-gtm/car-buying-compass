@@ -1,0 +1,30 @@
+---
+// Visible breadcrumb trail. The matching BreadcrumbList JSON-LD is built from
+// the same crumbs with breadcrumbList() in lib/site and passed to the layout.
+import type { Crumb } from "../lib/site";
+
+interface Props {
+  crumbs: Crumb[];
+}
+
+const { crumbs } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="eyebrow">
+  <ol class="flex flex-wrap items-center gap-x-1.5">
+    {
+      crumbs.map((crumb, index) => (
+        <li class="inline-flex items-center gap-x-1.5">
+          {index > 0 && <span aria-hidden="true">›</span>}
+          {index < crumbs.length - 1 ? (
+            <a href={crumb.path} class="text-inherit no-underline hover:underline">
+              {crumb.name}
+            </a>
+          ) : (
+            <span aria-current="page">{crumb.name}</span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
