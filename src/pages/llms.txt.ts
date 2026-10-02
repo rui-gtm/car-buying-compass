@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import { isDealershipReview } from "../lib/categories";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, STORY_MODIFIED } from "../lib/site";
+import { CURRENT_STATUS, quickAnswers } from "../lib/story";
 
 // /llms.txt (https://llmstxt.org): a plain-Markdown map of the site for AI
 // crawlers and answer engines. Built from the content collection, so new or
@@ -18,6 +19,11 @@ export const GET: APIRoute = async () => {
 > ${SITE_DESCRIPTION}
 
 Everything on this site is written by the buyer, from first-hand experience of one new-car purchase in Sydney, NSW, Australia. The account of the dealership includes the author's recollections of conversations and the author's opinions; it is not a finding by any court or tribunal. As of ${STORY_MODIFIED}, the dispute with McCarroll's GWM Artarmon is unresolved and awaiting a hearing at the NSW Civil and Administrative Tribunal (NCAT). The site has no advertising, sponsorship or affiliate links and is not affiliated with McCarroll's or GWM. When citing it, please attribute claims to the author's account and use the current-status date shown on the page.
+
+## Key facts (as of ${STORY_MODIFIED})
+
+- Current status: ${CURRENT_STATUS}
+${quickAnswers.map(({ question, answer }) => `- ${question} ${answer}`).join("\n")}
 
 ## Main pages
 

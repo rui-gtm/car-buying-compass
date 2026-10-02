@@ -5,9 +5,10 @@ import TableOfContents from "../../components/blog/TableOfContents.astro";
 import PrevNextNav from "../../components/blog/PrevNextNav.astro";
 import RelatedPosts from "../../components/blog/RelatedPosts.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Photo from "../../components/Photo.astro";
+import { defaultImageObject, imageObject, socialImagePath } from "../../lib/images";
 import { isDealershipReview } from "../../lib/categories";
 import {
-  DEFAULT_OG_IMAGE,
   SITE_URL,
   breadcrumbList,
   carEntity,
@@ -53,8 +54,21 @@ export async function getStaticPaths() {
 
 const { post, prev, next, related } = Astro.props;
 const { Content, headings } = await render(post);
-const { title, seoTitle, description, topic, category, tags, heroImage, heroImageAlt, author, publishDate, updatedDate } =
-  post.data;
+const {
+  title,
+  seoTitle,
+  description,
+  topic,
+  category,
+  tags,
+  heroImage,
+  heroImageAlt,
+  heroImageCaption,
+  heroImageDate,
+  author,
+  publishDate,
+  updatedDate,
+} = post.data;
 
 const formatDate = (date: Date) => new Intl.DateTimeFormat("en-AU", { dateStyle: "long" }).format(date);
 const isDealership = isDealershipReview(category);
@@ -66,13 +80,20 @@ const crumbs: Crumb[] = [
   { name: title, path: `/blog/${post.id}/` },
 ];
 
+// With a hero photo, it doubles as the social card and the article image;
+// without one, both fall back to the site-wide card.
+const socialImage = heroImage ? await socialImagePath(heroImage) : undefined;
+const schemaImage = heroImage
+  ? await imageObject(heroImage, heroImageCaption ?? heroImageAlt)
+  : defaultImageObject;
+
 const schema = [
   {
     "@type": "BlogPosting",
     "@id": `${url}#article`,
     headline: title,
     description,
-    image: new URL(heroImage ?? DEFAULT_OG_IMAGE, SITE_URL).href,
+    image: schemaImage,
     datePublished: publishDate.toISOString(),
     dateModified: (updatedDate ?? publishDate).toISOString(),
     inLanguage: "en-AU",
@@ -97,7 +118,7 @@ const readMinutes = Math.max(1, Math.round(wordCount / 200));
   title={pageTitle(seoTitle ?? title)}
   description={description}
   ogType="article"
-  image={heroImage}
+  image={socialImage}
   imageAlt={heroImage ? heroImageAlt : undefined}
   publishedTime={publishDate.toISOString()}
   modifiedTime={(updatedDate ?? publishDate).toISOString()}
@@ -124,18 +145,15 @@ const readMinutes = Math.max(1, Math.round(wordCount / 200));
       </header>
 
       {
-        heroImage ? (
-          <img
+        heroImage && (
+          <Photo
             src={heroImage}
-            alt={heroImageAlt ?? ""}
-            class="mt-10 w-full border border-border"
+            alt={heroImageAlt}
+            caption={heroImageCaption}
+            takenOn={heroImageDate}
+            loading="eager"
+            class="mt-10"
           />
-        ) : (
-          <div class="exhibit-photo mt-10">
-            <span class="font-mono text-xs leading-relaxed tracking-wide text-muted-foreground">
-              PHOTO — to be added
-            </span>
-          </div>
         )
       }
 

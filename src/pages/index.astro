@@ -1,9 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Faq from "../components/Faq.astro";
+import EvidencePhotos from "../components/EvidencePhotos.astro";
+import { CURRENT_STATUS, evidencePhotos, quickAnswers } from "../lib/story";
+import { defaultImageObject, imageObject } from "../lib/images";
 import {
   AUTHOR_NAME,
-  DEFAULT_OG_IMAGE,
   SITE_URL,
   STORY_MODIFIED,
   STORY_PUBLISHED,
@@ -20,35 +22,12 @@ const headline = "My car-buying experience with McCarroll's GWM Artarmon";
 const formatDate = (iso: string) =>
   new Intl.DateTimeFormat("en-AU", { dateStyle: "long" }).format(new Date(iso));
 
-// Short, factual answers lifted from the account below — the block search
-// engines and AI answer engines are most likely to quote. Keep them in step
-// with the current-status box and the timeline.
-const quickAnswers = [
-  {
-    question: "What happened with my new car from McCarroll's GWM Artarmon?",
-    answer:
-      "I collected a brand-new 2026 Haval Jolion Vanta from McCarroll's GWM Artarmon in May 2026 and found two dents, a deep scratch above the driver's door handle, a paint stain on the bonnet and trapped protective wrapping on the day. After two repair visits in June 2026, the dents and stain were fixed but the scratch was not.",
-  },
-  {
-    question: "Has the dispute been resolved?",
-    answer:
-      "No. As of 25 September 2026, the driver's door scratch has not been satisfactorily repaired and an NCAT hearing is yet to be scheduled.",
-  },
-  {
-    question: "What has McCarroll's offered?",
-    answer:
-      "After the second repair, a sales manager offered two services, which he valued at about $400–$500, instead of further repairing the door. After we said we intended to go to NCAT, McCarroll's offered to repaint the driver's door and provide three services. That remains its latest offer.",
-  },
-  {
-    question: "Why haven't you accepted the offer to repaint the door?",
-    answer:
-      "Two repair visits had already ended with assurances that the damage was fixed when it wasn't, and the offer does not address our concern that the damage and repainting could reduce the car's resale value.",
-  },
-  {
-    question: "Has McCarroll's responded to this account?",
-    answer:
-      "Not yet. McCarroll's has not yet been invited to respond specifically to this account. Any response will be recorded on this page.",
-  },
+// The social card, plus any evidence photos that have been added.
+const schemaImages = [
+  defaultImageObject,
+  ...(await Promise.all(
+    evidencePhotos.flatMap((photo) => (photo.src ? [imageObject(photo.src, photo.caption)] : [])),
+  )),
 ];
 
 const schema = [
@@ -57,7 +36,7 @@ const schema = [
     "@id": `${SITE_URL}/#article`,
     headline,
     description,
-    image: new URL(DEFAULT_OG_IMAGE, SITE_URL).href,
+    image: schemaImages,
     datePublished: STORY_PUBLISHED,
     dateModified: STORY_MODIFIED,
     inLanguage: "en-AU",
@@ -193,9 +172,7 @@ const toc = [
         <div class="editorial-card mt-8">
           <p class="section-marker">Current status — 25 September 2026</p>
           <p class="text-foreground">
-            The driver's door scratch has not been satisfactorily repaired. McCarroll's latest
-            offer is to repaint the door and provide three services. An NCAT hearing is yet to be
-            scheduled.
+            {CURRENT_STATUS}
           </p>
         </div>
 
@@ -278,6 +255,7 @@ const toc = [
               door, a deep scratch above the driver's door handle and a paint stain on the bonnet.
               Protective wrapping was also trapped between a door's rubber seal and frame.
             </p>
+            <EvidencePhotos section="collection" />
             <p>
               We reported the problems immediately. What followed was a series of repair visits,
               assurances and changing offers that left us with an unresolved scratch and little
@@ -328,11 +306,15 @@ const toc = [
                 been applied, but to us, the finish looked worse than before.
               </p>
             </div>
+            <EvidencePhotos section="second-collection" />
 
             <p class="mt-8">
               A sales manager offered two services, which he valued at approximately
               $400–$500, instead of further repairing the door. We had brought the car back
-              to have the damage fixed. An offer of servicing left that problem unresolved.
+              to have the damage fixed. An offer of servicing left that problem unresolved (see{" "}
+              <a href="/faq/#services-instead" class="editorial-link"
+                >what you can do when a dealer offers services instead of a repair</a
+              >).
             </p>
             <p>
               The manager then explained that a proper repair would require removing and
@@ -369,7 +351,12 @@ const toc = [
             </h2>
             <p>
               We continued pursuing the issue through emails and text messages. After we said we
-              intended to take the matter to the NSW Civil and Administrative Tribunal (NCAT), the
+              intended to take the matter to the{" "}
+              <a
+                href="https://ncat.nsw.gov.au/case-types/consumers-and-businesses/motor-vehicles.html"
+                class="editorial-link"
+                rel="noopener">NSW Civil and Administrative Tribunal (NCAT)</a
+              >, the
               dealership offered to repaint the driver's door and provide three services. At that
               stage, it also identified a panel shop that we were told had experience with
               European vehicles.
@@ -395,8 +382,10 @@ const toc = [
             </p>
             <p>
               We were also concerned about whether the damage and repainting would affect the
-              car's resale value. We asked for compensation for that potential loss; the amount,
-              if any, remains disputed. The offer of repainting and three services did not resolve
+              car's resale value. We asked for{" "}
+              <a href="/faq/#drop-in-value" class="editorial-link"
+                >compensation for that potential loss</a
+              >; the amount, if any, remains disputed. The offer of repainting and three services did not resolve
               those concerns, and further correspondence has prolonged the process without
               producing an agreement.
             </p>

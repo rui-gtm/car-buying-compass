@@ -1,4 +1,5 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync, rmSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
@@ -29,6 +30,31 @@ const lastmodByPath = {
   ...postDates,
 };
 
+// Astro copies each original photo into dist/_astro/ alongside the resized
+// versions, even though no page links to it. The original still carries the
+// phone's EXIF data (often including GPS location), so delete every image in
+// _astro/ that no built file references before anything is uploaded.
+const dropUnreferencedImages = {
+  name: "drop-unreferenced-images",
+  hooks: {
+    "astro:build:done": ({ dir, logger }) => {
+      const root = fileURLToPath(dir);
+      const assets = new URL("_astro/", dir);
+      const files = readdirSync(root, { recursive: true }).map(String);
+      const text = files
+        .filter((file) => /\.(html|xml|txt|css|js)$/.test(file))
+        .map((file) => readFileSync(new URL(file.replaceAll("\\", "/"), dir), "utf8"))
+        .join("\n");
+      for (const file of readdirSync(assets)) {
+        if (/\.(jpe?g|png|webp|avif|gif|tiff?)$/i.test(file) && !text.includes(file)) {
+          rmSync(new URL(file, assets));
+          logger.info(`removed unreferenced original ${file}`);
+        }
+      }
+    },
+  },
+};
+
 export default defineConfig({
   site: SITE_URL,
   // Every page is built as a folder with index.html, so its canonical URL ends
@@ -42,6 +68,7 @@ export default defineConfig({
   integrations: [
     react(),
     mdx(),
+    dropUnreferencedImages,
     sitemap({
       serialize(item) {
         const lastmod = lastmodByPath[new URL(item.url).pathname];

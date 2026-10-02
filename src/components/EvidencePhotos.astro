@@ -1,0 +1,31 @@
+---
+// The evidence photos for one story section (see src/lib/story.ts). Renders
+// nothing until at least one photo in that section has a `src`.
+import Photo from "./Photo.astro";
+import { evidencePhotos, type EvidencePhoto } from "../lib/story";
+
+interface Props {
+  section: EvidencePhoto["section"];
+}
+
+const photos = evidencePhotos.filter(
+  (photo): photo is EvidencePhoto & { src: NonNullable<EvidencePhoto["src"]> } =>
+    photo.section === Astro.props.section && photo.src !== undefined,
+);
+---
+
+{
+  photos.length > 0 && (
+    <div class:list={["mt-8 grid gap-6", photos.length > 1 && "sm:grid-cols-2"]}>
+      {photos.map((photo) => (
+        <Photo
+          src={photo.src}
+          alt={photo.alt}
+          caption={photo.caption}
+          takenOn={photo.takenOn}
+          sizes={photos.length > 1 ? "(min-width: 40rem) 50vw, 100vw" : undefined}
+        />
+      ))}
+    </div>
+  )
+}

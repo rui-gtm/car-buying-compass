@@ -1,0 +1,60 @@
+# Apache config for Crazy Domains cPanel hosting. Upload the CONTENTS of dist/
+# (including this hidden file) into public_html/ with FileZilla.
+# In FileZilla, turn on Server > Force showing hidden files to see it.
+
+Options -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+# Serve every text file as UTF-8 (llms.txt, rss.xml and the pages contain
+# apostrophes, dashes and $ signs that break under other encodings).
+AddDefaultCharset UTF-8
+AddCharset UTF-8 .html .txt .xml .css .js .json .svg
+AddType application/rss+xml .rss
+AddType image/avif .avif
+AddType image/webp .webp
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # One canonical address: https://mccarrollsreview.com.au/ (no www).
+  # http:// and www. both go there in a single 301.
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} ^www\. [NC]
+  RewriteRule ^ https://mccarrollsreview.com.au%{REQUEST_URI} [R=301,L,NE]
+
+  # /faq/index.html → /faq/ (and /index.html → /), so only the canonical URL
+  # is ever indexed.
+  RewriteCond %{THE_REQUEST} \s/+((?:[^\s?]*/)?)index\.html[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L,NE]
+
+  # A page URL typed without its trailing slash (/faq) → /faq/. Apache's
+  # DirectorySlash would do this too, but over http; this keeps it on https.
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^(.*[^/])$ /$1/ [R=301,L,NE]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+
+  # Built CSS/JS/images in /_astro/ have a content hash in their names, so
+  # they can be cached for a year. Pages are re-checked on every visit, so an
+  # update is seen immediately.
+  <FilesMatch "\.(css|js|avif|webp|jpe?g|png|svg|ico|woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(html|xml|txt)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  # The favicons, social card and robots/llms files keep fixed names, so
+  # they must not be cached as immutable.
+  <FilesMatch "^(favicon\.(ico|svg)|apple-touch-icon\.png|og-image\.png)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml application/xml application/rss+xml application/javascript application/json image/svg+xml
+</IfModule>

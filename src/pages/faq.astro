@@ -5,6 +5,10 @@ import { AUTHOR_NAME, FAQ_MODIFIED, SITE_URL, breadcrumbList, ids, pageTitle } f
 // Official sources cited under the answers. Check the links still resolve
 // whenever the page is updated.
 const sources = {
+  acccRemedies: {
+    label: "ACCC: Repair, replace, refund, cancel",
+    href: "https://www.accc.gov.au/consumers/buying-products-and-services/repair-replace-refund",
+  },
   accc: {
     label: "ACCC: New and second-hand cars",
     href: "https://www.accc.gov.au/consumers/health-home-car/motor-cars",
@@ -71,6 +75,39 @@ const faqs: FaqEntry[] = [
     storyId: "two-attempts",
   },
   {
+    id: "damaged-at-delivery",
+    question: "What can I do if a new car is damaged at delivery?",
+    answer:
+      "Record the damage on the handover paperwork and in dated photos before driving away, then ask the dealer in writing how and by when it will be repaired. Under the Australian Consumer Law, a business must fix a minor problem free of charge.",
+    detail:
+      "A problem is major if, for example, the car is unsafe, is very different from its description, or has a serious problem or several smaller ones that would have stopped you buying it had you known. A major problem gives you the choice of a refund or a replacement. If the dealer can't or won't fix a minor problem within a reasonable time, you can have it fixed elsewhere and recover the reasonable cost, ask for a refund or replacement instead, or keep the car and be compensated for the drop in value.",
+    note: "In my case, the damage was found at collection and the dealer chose to repair it. Two repair visits later, the scratch remained.",
+    storyId: "collection",
+    sources: [sources.acccRemedies],
+  },
+  {
+    id: "services-instead",
+    question: "What if a dealer offers free services instead of fixing the damage?",
+    answer:
+      "You can decline. Under the Australian Consumer Law, the remedy for a problem is a free repair, a replacement or a refund; something else, such as free servicing, only takes its place if you choose to accept it.",
+    detail:
+      "If you decline, say so in writing and restate what you are asking for, such as a repair to a stated standard by a stated date. If you are considering accepting, check whether the offer is meant to settle your whole complaint, and keep a copy of what was offered and when.",
+    note: "After the second repair, a sales manager offered two services, which he valued at about $400–$500, instead of further repairing the door.",
+    storyId: "second-collection",
+    sources: [sources.acccRemedies],
+  },
+  {
+    id: "drop-in-value",
+    question: "Can I be compensated if damage or repairs reduce my car's value?",
+    answer:
+      "Possibly. The ACCC says a consumer can keep a product and be compensated for the drop in value caused by a problem, for example when a minor problem is not fixed within a reasonable time, and in some cases for other damages and loss.",
+    detail:
+      "Whether a repaired or repainted panel reduces a car's value, and by how much, depends on the facts and on evidence such as an independent valuation. If you can't agree with the dealer, NCAT can make orders for money to be paid in motor vehicle disputes in NSW. Get independent advice about your own circumstances.",
+    note: "This is the question still in dispute in my case: whether the damage and repainting leave the car worth less.",
+    storyId: "why-declined",
+    sources: [sources.acccRemedies, sources.ncat],
+  },
+  {
     id: "not-as-described",
     question: "What are my rights if a new car is damaged or not as described in Australia?",
     answer:
@@ -87,7 +124,7 @@ const faqs: FaqEntry[] = [
     answer:
       "Put the complaint to the dealer in writing first, stating the outcome you seek and a response date. If it stays unresolved, you can lodge a complaint with NSW Fair Trading and apply to the NSW Civil and Administrative Tribunal (NCAT).",
     detail:
-      "Begin with the dealership's sales or service contact, then ask for the dealer principal or complaints manager. Keep the message concise: chronology, evidence, problem, requested remedy and response date. NSW Fair Trading's vehicle complaint form asks for the vehicle details and documents such as quotes, reports and invoices. NCAT's Consumer and Commercial Division hears motor vehicle disputes, including faulty new cars and unsatisfactory repairs; for a motor vehicle consumer claim you must apply within three years of when the problem began. Outside NSW, contact your state or territory consumer affairs body.",
+      "Begin with the dealership's sales or service contact, then ask for the dealer principal or complaints manager. Keep the message concise: chronology, evidence, problem, requested remedy and response date. NSW Fair Trading's vehicle complaint form asks for the vehicle details and documents such as quotes, reports and invoices. NCAT's Consumer and Commercial Division hears motor vehicle disputes, including disputes about buying a vehicle from a dealer and about repairs; for a motor vehicle consumer claim you must apply within three years of when the problem began. Outside NSW, contact your state or territory consumer affairs body.",
     note: "I raised NCAT after two failed repairs and ongoing email follow-up produced no resolution.",
     storyId: "ncat-offer",
     sources: [sources.fairTrading, sources.ncat],
@@ -113,11 +150,11 @@ const groups = [
   },
   {
     title: "Collection and repairs",
-    ids: ["delivery-inspection", "repair-scope-writing"],
+    ids: ["delivery-inspection", "damaged-at-delivery", "repair-scope-writing", "services-instead"],
   },
   {
     title: "Your rights and complaints",
-    ids: ["not-as-described", "escalate-complaint", "document-records"],
+    ids: ["not-as-described", "drop-in-value", "escalate-complaint", "document-records"],
   },
 ].map((group) => ({
   ...group,

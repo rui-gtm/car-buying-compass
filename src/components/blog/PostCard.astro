@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import Photo from "../Photo.astro";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -14,21 +15,20 @@ const href = `/blog/${post.id}/`;
 <!-- The title link is stretched over the whole card so image and text are
      one click target, without nesting interactive elements. -->
 <article class="group relative flex flex-col">
+  {/* No photo yet: show nothing rather than a "to be added" box, which reads
+      as an unfinished page to readers and search engines alike. */}
   {
-    heroImage ? (
-      <img
+    heroImage && (
+      <Photo
         src={heroImage}
-        alt={heroImageAlt ?? ""}
-        class="aspect-video w-full border border-border object-cover"
-        loading="lazy"
+        alt={heroImageAlt}
+        sizes="(min-width: 64rem) 23rem, (min-width: 40rem) 50vw, 100vw"
+        class="mb-5"
+        imgClass="aspect-video w-full border border-border object-cover"
       />
-    ) : (
-      <div class="exhibit-photo aspect-video min-h-0!">
-        <span class="font-mono text-xs tracking-wide text-muted-foreground">PHOTO — to be added</span>
-      </div>
     )
   }
-  <p class="mt-5 text-xs uppercase tracking-[0.12em] text-muted-foreground">{topic}</p>
+  <p class="text-xs uppercase tracking-[0.12em] text-muted-foreground">{topic}</p>
   <h3 class="mt-2 text-xl font-bold leading-snug text-foreground">
     <a href={href} class="no-underline after:absolute after:inset-0 group-hover:text-primary">
       {title}

@@ -15,6 +15,11 @@ const searchText = (post: (typeof posts)[number]) =>
     .join(" ")
     .toLowerCase();
 
+// Only offer filter chips for categories that have at least one post.
+const categories = REVIEW_CATEGORIES.filter((category) =>
+  posts.some((post) => post.data.category === category),
+);
+
 // Two H2 groups keep the company and the car visibly apart.
 const groups = [
   {
@@ -96,7 +101,7 @@ const schema = [
           {
             [
               { slug: "", label: "All" },
-              ...REVIEW_CATEGORIES.map((c) => ({ slug: categorySlug(c), label: c })),
+              ...categories.map((c) => ({ slug: categorySlug(c), label: c })),
             ].map(({ slug, label }) => (
               <button
                 type="button"

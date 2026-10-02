@@ -264,18 +264,6 @@
   &:hover { color: var(--color-primary); }
 }
 
-@utility exhibit-photo {
-  background-color: var(--color-secondary);
-  background-image: repeating-linear-gradient(135deg, var(--color-border) 0 1px, transparent 1px 12px);
-  border: 1px solid var(--color-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 10rem;
-  padding: 1.5rem;
-  text-align: center;
-}
-
 @utility blog-prose {
   & h2 {
     color: var(--color-foreground);
