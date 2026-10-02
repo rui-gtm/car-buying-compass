@@ -146,7 +146,7 @@ const readMinutes = Math.max(1, Math.round(wordCount / 200));
       </header>
 
       {
-        heroImage && (
+        heroImage ? (
           <Photo
             src={heroImage}
             alt={heroImageAlt}
@@ -155,6 +155,12 @@ const readMinutes = Math.max(1, Math.round(wordCount / 200));
             loading="eager"
             class="mt-10"
           />
+        ) : (
+          <div class="exhibit-photo mt-10">
+            <span class="font-mono text-xs leading-relaxed tracking-wide text-muted-foreground">
+              PHOTO — to be added
+            </span>
+          </div>
         )
       }
 

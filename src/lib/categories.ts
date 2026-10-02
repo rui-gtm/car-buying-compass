@@ -1,5 +1,7 @@
 // Fixed set of filter categories shown as chips on the /blog/ listing. Each
-// post belongs to exactly one via its `category` frontmatter; the
+// post belongs to exactly one via its `category` frontmatter, which is also
+// the label shown above its title on the listing card. Every chip is shown,
+// even with no posts yet; it then shows the "no reviews yet" message. The
 // order here is the order the chips appear in.
 export const REVIEW_CATEGORIES = [
   "Owner review",

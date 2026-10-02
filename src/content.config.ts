@@ -24,7 +24,7 @@ const blog = defineCollection({
       category: z.enum(REVIEW_CATEGORIES),
       // Relative path to the photo in src/assets/photos/, e.g.
       // "../../assets/photos/driver-door-scratch-2026-06.jpg". Leave unset until
-      // a real photo exists — nothing is shown in its place. When set, it is
+      // a real photo exists — a "PHOTO — to be added" placeholder is shown instead. When set, it is
       // also the post's social card and structured-data image.
       heroImage: image().optional(),
       // Required on every post so a photo can be dropped in at any time: say

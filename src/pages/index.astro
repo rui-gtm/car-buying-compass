@@ -126,7 +126,18 @@ const timeline: TimelineItem[] = [
   },
 ];
 
+// The case at a glance, shown as a progress tracker beside the hero. Keep it
+// in step with the timeline above and CURRENT_STATUS in lib/story.ts.
+const caseSteps: { when: string; title: string; note: string; pending?: boolean }[] = [
+  { when: "May 2026", title: "Car collected", note: "Two dents, a deep scratch and a paint stain found on the day" },
+  { when: "June 2026", title: "First repair · ~3 days", note: "Dents and stain fixed; the scratch remained" },
+  { when: "June 2026", title: "Second repair · ~3 days", note: "Touch-up applied; the scratch still visible" },
+  { when: "Mid-2026", title: "NCAT raised", note: "Offer changed to a repaint plus three services" },
+  { when: "Next", title: "NCAT hearing", note: "Not yet scheduled", pending: true },
+];
+
 const toc = [
+  { href: "#quick-answers", label: "Quick answers" },
   { href: "#collection", label: "Collection day" },
   { href: "#dents-fixed", label: "The dents were fixed. The scratch wasn't." },
   { href: "#second-collection", label: "“Fixed”—until we saw the car" },
@@ -149,89 +160,69 @@ const toc = [
   schema={schema}
 >
   <main id="main-content">
-    <article class="mx-auto max-w-6xl px-4 pb-8 pt-16 sm:px-6 sm:pt-24">
-      <header>
-        <p class="eyebrow">First-person account</p>
-        <h1 class="mt-4 text-4xl font-bold leading-tight text-foreground sm:text-5xl">
-          {headline}
-        </h1>
-        <p class="mt-6 text-xl leading-8 text-foreground">
-          Two visits. Around six days back at the dealership. Repeated assurances that the damage
-          was fixed. Yet the scratch on my brand-new Haval remained, and the dispute is now
-          heading to an NCAT hearing.
-        </p>
-        <p class="mt-5 text-sm text-muted-foreground">
-          By {AUTHOR_NAME}
-          <span aria-hidden="true"> · </span>Published <time datetime={STORY_PUBLISHED}>{formatDate(STORY_PUBLISHED)}</time>
-          <span aria-hidden="true"> · </span>Last updated <time datetime={STORY_MODIFIED}>{formatDate(STORY_MODIFIED)}</time>
-        </p>
-        <p class="mt-3 text-sm leading-6 text-muted-foreground">
-          Disclosure: this is a customer account of one purchase, including our recollections of
-          conversations. The dispute awaits an NCAT hearing. McCarroll's has not yet been invited
-          to respond specifically to this article.
-        </p>
+    <article>
+      <header class="hero-band">
+        <div
+          class="pb-section mx-auto grid max-w-6xl gap-10 px-4 pt-10 sm:px-6 sm:pt-14 lg:grid-cols-[minmax(0,1fr)_21rem] lg:items-start lg:gap-14 lg:pt-20"
+        >
+          <div class="min-w-0">
+            <p class="status-pill">
+              <span class="status-dot" aria-hidden="true"></span>
+              Unresolved · NCAT hearing pending
+            </p>
+            <h1 class="hero-title mt-6">{headline}</h1>
+            <p class="hero-hook mt-6">
+              Two visits. Around six days back at the dealership. Repeated assurances that the
+              damage was fixed. Yet the scratch on my brand-new Haval remained, and the dispute is
+              now heading to an NCAT hearing.
+            </p>
+            <p class="mt-6 flex flex-wrap gap-x-2 text-sm text-muted-foreground">
+              <span>By {AUTHOR_NAME}</span>
+              <span aria-hidden="true">·</span>
+              <span>Published <time datetime={STORY_PUBLISHED}>{formatDate(STORY_PUBLISHED)}</time></span>
+              <span aria-hidden="true">·</span>
+              <span>Updated <time datetime={STORY_MODIFIED}>{formatDate(STORY_MODIFIED)}</time></span>
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a href="#collection" class="hero-cta">Read what happened <span aria-hidden="true">↓</span></a>
+              <a href="#timeline-heading" class="hero-cta-secondary">See the timeline</a>
+            </div>
+            <p class="hero-disclosure mt-10">
+              Disclosure: this is a customer account of one purchase, including our recollections
+              of conversations. The dispute awaits an NCAT hearing. McCarroll's has not yet been
+              invited to respond specifically to this article.
+            </p>
+          </div>
 
-        <div class="editorial-card mt-8">
-          <p class="section-marker">Current status — 25 September 2026</p>
-          <p class="text-foreground">
-            {CURRENT_STATUS}
-          </p>
+          <aside aria-labelledby="current-status" class="case-card">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h2 id="current-status" class="section-marker mb-0!">Current status</h2>
+              <time datetime={STORY_MODIFIED} class="text-xs text-muted-foreground">
+                {formatDate(STORY_MODIFIED)}
+              </time>
+            </div>
+            <p class="mt-3 text-base leading-7 text-foreground">{CURRENT_STATUS}</p>
+            <ol class="case-steps mt-7" aria-label="What has happened so far">
+              {
+                caseSteps.map((step) => (
+                  <li class="case-step" data-pending={step.pending ? "" : undefined}>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                      {step.when}
+                    </p>
+                    <p class="mt-0.5 font-bold leading-snug text-foreground">{step.title}</p>
+                    <p class="mt-0.5 text-sm leading-6 text-muted-foreground">{step.note}</p>
+                  </li>
+                ))
+              }
+            </ol>
+          </aside>
         </div>
-
-        <dl class="quick-facts mt-8">
-          <div>
-            <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Car collected
-            </dt>
-            <dd class="mt-1 text-xl font-bold text-foreground">May 2026</dd>
-            <dd class="text-sm text-muted-foreground">damage found on the day</dd>
-          </div>
-          <div>
-            <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              First repair
-            </dt>
-            <dd class="mt-1 text-xl font-bold text-foreground">~3 days</dd>
-            <dd class="text-sm text-muted-foreground">dents and stain fixed, scratch remained</dd>
-          </div>
-          <div>
-            <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Second repair
-            </dt>
-            <dd class="mt-1 text-xl font-bold text-foreground">~3 days</dd>
-            <dd class="text-sm text-muted-foreground">scratch still visible on collection</dd>
-          </div>
-          <div>
-            <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              NCAT hearing
-            </dt>
-            <dd class="mt-1 text-xl font-bold text-foreground">Pending</dd>
-            <dd class="text-sm text-muted-foreground">not yet scheduled</dd>
-          </div>
-        </dl>
-
-        <p class="mt-10 text-sm font-bold uppercase tracking-wide text-muted-foreground">
-          In short
-        </p>
-        <p class="mt-2 text-lg leading-8 text-foreground">
-          I collected a brand-new Haval Jolion Vanta from McCarroll's GWM in Artarmon and found
-          damage on it the same day. Two repair visits later, the dents and a paint stain were
-          fixed, but a scratch above the driver's door handle was not. We were told twice that it
-          had been fixed; twice, it hadn't. A sales manager eventually said the door needed
-          repainting and that he would not authorise it, before an offer to repaint it only arrived
-          once we raised the NSW Civil and Administrative Tribunal. This chronology records what
-          happened at each visit, what we were told, and why we haven't accepted the latest offer.
-        </p>
-
-        <section aria-labelledby="quick-answers" class="mt-10 max-w-reading">
-          <h2 id="quick-answers" class="text-sm font-bold uppercase tracking-wide text-muted-foreground">
-            Quick answers
-          </h2>
-          <Faq items={quickAnswers} />
-        </section>
       </header>
 
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+
       <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start lg:gap-12">
-        <nav aria-label="Table of contents" class="toc-nav sticky top-24 hidden lg:order-2 lg:mt-10 lg:grid">
+        <nav aria-label="Table of contents" class="toc-nav sticky top-24 hidden lg:order-2 lg:grid">
           <p class="text-xs font-bold uppercase tracking-wide text-muted-foreground">
             On this page
           </p>
@@ -240,13 +231,34 @@ const toc = [
         </nav>
 
         <div class="min-w-0 lg:order-1">
-          <details class="editorial-details mt-8 hidden sm:block lg:hidden">
+          <details class="editorial-details mb-section mt-0! hidden sm:block lg:hidden">
             <summary>On this page</summary>
             <nav aria-label="Table of contents" class="toc-nav mt-4">
               {toc.map((item) => <a href={item.href} class="toc-link">{item.label}</a>)}
               <a href="#main-content" class="toc-top">Back to top ↑</a>
             </nav>
           </details>
+
+          <section aria-labelledby="in-short" class="in-short">
+            <h2 id="in-short" class="section-marker">In short</h2>
+            <p>
+              I collected a brand-new Haval Jolion Vanta from McCarroll's GWM in Artarmon and found
+              damage on it the same day. Two repair visits later, the dents and a paint stain were
+              fixed, but a scratch above the driver's door handle was not. We were told twice that it
+              had been fixed; twice, it hadn't. A sales manager eventually said the door needed
+              repainting and that he would not authorise it, before an offer to repaint it only arrived
+              once we raised the NSW Civil and Administrative Tribunal. This chronology records what
+              happened at each visit, what we were told, and why we haven't accepted the latest offer.
+            </p>
+          </section>
+
+          <section aria-labelledby="quick-answers" class="quick-answers mt-section">
+            <h2 id="quick-answers" class="text-xl font-bold text-foreground">Quick answers</h2>
+            <p class="mt-1 text-sm text-muted-foreground">
+              The short version, as of {formatDate(STORY_MODIFIED)}.
+            </p>
+            <Faq items={quickAnswers} />
+          </section>
 
           <section aria-labelledby="collection" class="story-section">
             <p class="section-marker">Collection</p>
@@ -517,6 +529,7 @@ const toc = [
         </p>
       </section>
         </div>
+      </div>
       </div>
     </article>
 

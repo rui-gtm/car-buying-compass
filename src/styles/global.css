@@ -47,6 +47,8 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -67,6 +69,9 @@
 }
 
 :root {
+  /* One vertical rhythm for every page: hero → first content, section →
+     section, and last section → "Continue reading". */
+  --section-gap: 3.5rem;
   --radius: 0.25rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.262 0.009 248.2);
@@ -84,6 +89,10 @@
   --accent-foreground: oklch(0.262 0.009 248.2);
   --destructive: oklch(0.561 0.218 26.8);
   --destructive-foreground: oklch(1 0 0);
+  /* "Unresolved / pending" amber: the dot and ring use --warning; text on a
+     light amber tint uses --warning-foreground (AA contrast). */
+  --warning: oklch(0.78 0.16 78);
+  --warning-foreground: oklch(0.46 0.1 70);
   --border: oklch(0.898 0 0);
   --input: oklch(0.898 0 0);
   --ring: oklch(0.262 0.009 248.2);
@@ -119,6 +128,8 @@
   --accent-foreground: oklch(0.97 0 0);
   --destructive: oklch(0.63 0.2 26.8);
   --destructive-foreground: oklch(1 0 0);
+  --warning: oklch(0.78 0.15 70);
+  --warning-foreground: oklch(0.85 0.1 75);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.97 0 0);
@@ -162,6 +173,11 @@
 
 @utility max-w-reading { max-width: 68ch; }
 
+@utility mt-section { margin-top: var(--section-gap); }
+@utility mb-section { margin-bottom: var(--section-gap); }
+@utility pb-section { padding-bottom: var(--section-gap); }
+@utility gap-section { gap: var(--section-gap); }
+
 @utility eyebrow {
   color: var(--color-primary);
   font-size: 0.78rem;
@@ -178,13 +194,13 @@
 }
 
 @utility story-section {
-  margin-top: 4rem;
+  margin-top: var(--section-gap);
   & > p { margin-top: 1.5rem; }
   & > .section-marker { margin-top: 0; }
 }
 
 @utility story-section-emphasis {
-  margin-top: 5rem;
+  margin-top: var(--section-gap);
 }
 
 @utility section-marker {
@@ -236,7 +252,7 @@
 @utility onward-links {
   background: var(--color-foreground);
   color: var(--color-background);
-  margin-top: 5rem;
+  margin-top: var(--section-gap);
   padding: 3rem max(1rem, calc((100vw - 72rem) / 2));
   & .eyebrow { color: color-mix(in oklch, var(--color-background) 70%, transparent); }
   & .editorial-link { color: var(--color-background); }
@@ -255,6 +271,188 @@
   padding: 1.5rem 0;
 }
 
+/* --- Story hero ------------------------------------------------------------ */
+
+/* Full-width tinted band that fades into the page, so the hero reads as one
+   unit and the white status card stands out against it. */
+@utility hero-band {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--color-secondary) 85%, var(--color-background)) 0%,
+    var(--color-background) 100%
+  );
+}
+
+@utility hero-title {
+  color: var(--color-foreground);
+  font-size: clamp(2.25rem, 1.5rem + 3vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+@utility hero-hook {
+  color: var(--color-muted-foreground);
+  font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem);
+  line-height: 1.45;
+  max-width: 44ch;
+  text-wrap: pretty;
+}
+
+@utility hero-disclosure {
+  border-left: 2px solid var(--color-border);
+  color: var(--color-muted-foreground);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  max-width: 60ch;
+  padding-left: 0.9rem;
+}
+
+@utility status-pill {
+  align-items: center;
+  color: var(--color-warning-foreground);
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 650;
+  gap: 0.55rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  /* Room for the pulsing ring around the dot. */
+  padding: 0.45rem 0 0.45rem 0.1rem;
+}
+
+/* The neutral sibling of status-pill for the Blog and FAQ heroes: same type
+   and dot, no amber and no pulse. */
+@utility hero-kicker {
+  align-items: center;
+  color: var(--color-muted-foreground);
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 650;
+  gap: 0.55rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  padding: 0.45rem 0 0.45rem 0.1rem;
+  &::before {
+    background: var(--color-foreground);
+    border-radius: 999px;
+    content: "";
+    flex: none;
+    height: 0.55rem;
+    width: 0.55rem;
+  }
+}
+
+@utility status-dot {
+  animation: status-pulse 2.4s ease-out infinite;
+  background: var(--color-warning);
+  border-radius: 999px;
+  flex: none;
+  height: 0.55rem;
+  width: 0.55rem;
+}
+
+@keyframes status-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-warning) 55%, transparent); }
+  70%, 100% { box-shadow: 0 0 0 0.45rem transparent; }
+}
+
+@utility hero-cta {
+  align-items: center;
+  background: var(--color-foreground);
+  border-radius: var(--radius);
+  color: var(--color-background);
+  display: inline-flex;
+  font-weight: 650;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0 1.4rem;
+  text-decoration: none;
+  transition: background-color 150ms;
+  &:hover { background: color-mix(in oklch, var(--color-foreground) 85%, var(--color-background)); }
+}
+
+@utility hero-cta-secondary {
+  align-items: center;
+  background: var(--color-background);
+  border: 1px solid color-mix(in oklch, var(--color-foreground) 22%, transparent);
+  border-radius: var(--radius);
+  color: var(--color-foreground);
+  display: inline-flex;
+  font-weight: 650;
+  min-height: 3rem;
+  padding: 0 1.4rem;
+  text-decoration: none;
+  transition: border-color 150ms;
+  &:hover { border-color: var(--color-foreground); }
+}
+
+@utility case-card {
+  background: var(--color-card);
+  border-radius: calc(var(--radius) * 2);
+  box-shadow: 0 1px 2px oklch(0 0 0 / 4%), 0 12px 32px -12px oklch(0 0 0 / 14%);
+  padding: 1.5rem 1.5rem 1.25rem;
+}
+
+@utility case-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* One step of the progress tracker: a dot on a connecting line. Completed
+   steps are solid; the pending step is a hollow amber ring. */
+@utility case-step {
+  padding: 0 0 1.1rem 1.6rem;
+  position: relative;
+  &::before {
+    background: var(--color-border);
+    bottom: 0;
+    content: "";
+    left: 0.28rem;
+    position: absolute;
+    top: 1.05rem;
+    width: 2px;
+  }
+  &:last-child { padding-bottom: 0; }
+  &:last-child::before { display: none; }
+  &::after {
+    background: var(--color-foreground);
+    border-radius: 999px;
+    content: "";
+    height: 0.65rem;
+    left: 0;
+    position: absolute;
+    top: 0.3rem;
+    width: 0.65rem;
+  }
+  &[data-pending]::after {
+    background: var(--color-card);
+    box-shadow: 0 0 0 2px var(--color-warning);
+  }
+}
+
+@utility in-short {
+  border-left: 3px solid var(--color-foreground);
+  padding-left: 1.25rem;
+  & > p {
+    color: var(--color-foreground);
+    font-size: 1.2rem;
+    line-height: 1.75;
+    max-width: 68ch;
+  }
+}
+
+@utility quick-answers {
+  background: color-mix(in oklch, var(--color-secondary) 55%, var(--color-background));
+  border-radius: calc(var(--radius) * 2);
+  max-width: 68ch;
+  padding: 1.5rem 1.5rem 1rem;
+  & .editorial-details { border-color: color-mix(in oklch, var(--color-foreground) 12%, transparent); }
+  & > div { margin-top: 1rem; }
+}
+
 @utility stop-nav {
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
@@ -266,6 +464,30 @@
   font-weight: 650;
   text-decoration: none;
   &:hover { color: var(--color-primary); }
+}
+
+/* "Nothing here yet" panel, e.g. a /blog/ filter with no matching posts. */
+@utility empty-state {
+  background: color-mix(in oklch, var(--color-secondary) 45%, var(--color-background));
+  border: 1px dashed color-mix(in oklch, var(--color-foreground) 22%, transparent);
+  border-radius: calc(var(--radius) * 3);
+  padding: 3.5rem 1.5rem;
+  text-align: center;
+  & > svg { margin-inline: auto; }
+  &[hidden] { display: none; }
+}
+
+/* Hatched placeholder shown wherever a photo has not been added yet. */
+@utility exhibit-photo {
+  background-color: var(--color-secondary);
+  background-image: repeating-linear-gradient(135deg, var(--color-border) 0 1px, transparent 1px 12px);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 10rem;
+  padding: 1.5rem;
+  text-align: center;
 }
 
 @utility blog-prose {
@@ -344,4 +566,5 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 0.01ms !important; }
+  .status-dot { animation: none; }
 }

@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostCard from "../../components/blog/PostCard.astro";
-import { REVIEW_CATEGORIES, categorySlug, isDealershipReview } from "../../lib/categories";
+import { REVIEW_CATEGORIES, categorySlug } from "../../lib/categories";
 import { SITE_URL, ids, pageTitle } from "../../lib/site";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
@@ -16,23 +16,7 @@ const searchText = (post: (typeof posts)[number]) =>
     .toLowerCase();
 
 // Only offer filter chips for categories that have at least one post.
-const categories = REVIEW_CATEGORIES.filter((category) =>
-  posts.some((post) => post.data.category === category),
-);
 
-// Two H2 groups keep the company and the car visibly apart.
-const groups = [
-  {
-    id: "dealership-reviews",
-    title: "Dealership review: McCarroll's GWM Artarmon",
-    posts: posts.filter((post) => isDealershipReview(post.data.category)),
-  },
-  {
-    id: "vehicle-reviews",
-    title: "GWM Haval Jolion reviews",
-    posts: posts.filter((post) => !isDealershipReview(post.data.category)),
-  },
-].filter((group) => group.posts.length > 0);
 
 const title = "McCarroll's GWM Artarmon & Haval Jolion Owner Reviews";
 const description =
@@ -67,22 +51,27 @@ const schema = [
   schema={schema}
 >
   <main id="main-content">
-    <article class="mx-auto max-w-6xl px-4 pb-8 pt-16 sm:px-6 sm:pt-24">
-      <header class="max-w-reading">
-        <p class="eyebrow">Owner reviews</p>
-        <h1 class="mt-4 text-4xl font-bold leading-tight text-foreground sm:text-5xl">
-          McCarroll's GWM Artarmon and the Haval Jolion, reviewed separately
-        </h1>
-        <p class="mt-6 text-xl leading-8 text-muted-foreground">
-          I bought a new 2026 GWM Haval Jolion Vanta from McCarroll's GWM Artarmon in May 2026.
-          Everything here comes from that purchase and from driving the car around Sydney since.
-        </p>
-        <p class="mt-4 leading-7 text-muted-foreground">
-          The dealership and the car are reviewed separately: how McCarroll's handled delivery,
-          repairs and my complaint says nothing about how the Jolion drives, and the other way
-          round. I am not affiliated with McCarroll's or GWM and the site carries no advertising.
-        </p>
-        <form role="search" class="mt-8" action="/blog/" method="get">
+    <article>
+      <header class="hero-band">
+        <div class="pb-section mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-14 lg:pt-20">
+          <div>
+            <p class="hero-kicker">
+              Owner reviews · {posts.length} {posts.length === 1 ? "article" : "articles"}
+            </p>
+            <h1 class="hero-title mt-6">
+              McCarroll's GWM Artarmon and the Haval Jolion, reviewed separately
+            </h1>
+            <p class="hero-hook mt-6 max-w-none!">
+              I bought a new 2026 GWM Haval Jolion Vanta from McCarroll's GWM Artarmon in May 2026.
+              Everything here comes from that purchase and from driving the car around Sydney since.
+            </p>
+            <p class="hero-disclosure mt-8 max-w-none!">
+              The dealership and the car are reviewed separately: how McCarroll's handled delivery,
+              repairs and my complaint says nothing about how the Jolion drives, and the other way
+              round. I am not affiliated with McCarroll's or GWM and the site carries no advertising.
+            </p>
+          </div>
+        <form role="search" class="mt-10 w-full sm:w-1/2" action="/blog/" method="get">
           <label for="review-search" class="sr-only">Search reviews</label>
           <input
             id="review-search"
@@ -90,20 +79,20 @@ const schema = [
             name="q"
             autocomplete="off"
             placeholder="Search reviews, e.g. safety, price, dealership"
-            class="h-12 w-full border border-input bg-background px-4 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:outline-none"
+            class="h-12 w-full rounded-[var(--radius)] border border-input bg-background px-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus-visible:outline-none"
           />
         </form>
         <div role="group" aria-label="Filter by category" class="mt-4 flex flex-wrap gap-2">
           {
             [
               { slug: "", label: "All" },
-              ...categories.map((c) => ({ slug: categorySlug(c), label: c })),
+              ...REVIEW_CATEGORIES.map((c) => ({ slug: categorySlug(c), label: c })),
             ].map(({ slug, label }) => (
               <button
                 type="button"
                 data-category-filter={slug}
                 aria-pressed={slug === "" ? "true" : "false"}
-                class="h-9 cursor-pointer border border-border bg-background px-3 text-sm text-muted-foreground hover:border-foreground hover:text-foreground aria-pressed:border-foreground aria-pressed:bg-foreground aria-pressed:text-background"
+                class="h-9 cursor-pointer rounded-full border border-border bg-background px-3.5 text-sm font-medium text-muted-foreground hover:border-foreground hover:text-foreground aria-pressed:border-foreground aria-pressed:bg-foreground aria-pressed:text-background"
               >
                 {label}
               </button>
@@ -111,38 +100,55 @@ const schema = [
           }
         </div>
         <p id="review-search-status" class="sr-only" aria-live="polite"></p>
+        </div>
       </header>
 
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+
       {
-        groups.length > 0 ? (
-          groups.map((group) => (
-            <section data-review-group aria-labelledby={group.id} class="mt-14">
-              <h2 id={group.id} class="text-2xl font-bold text-foreground">
-                {group.title}
-              </h2>
-              <div class="mt-6 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-                {group.posts.map((post) => (
-                  <div
-                    data-review-card
-                    data-search={searchText(post)}
-                    data-category={categorySlug(post.data.category)}
-                    class="grid"
-                  >
-                    <PostCard post={post} />
-                  </div>
-                ))}
+        posts.length > 0 ? (
+          <div class="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post) => (
+              <div
+                data-review-card
+                data-search={searchText(post)}
+                data-category={categorySlug(post.data.category)}
+                class="grid"
+              >
+                <PostCard post={post} headingLevel="h2" />
               </div>
-            </section>
-          ))
+            ))}
+          </div>
         ) : (
-          <p class="mt-14 text-muted-foreground">
+          <p class="text-muted-foreground">
             The first reviews are on their way — check back soon.
           </p>
         )
       }
-      <p id="review-search-empty" class="mt-14 text-muted-foreground" hidden>
-        No reviews match yet. Try another category or a broader term, such as "Jolion" or "price".
-      </p>
+      <!-- Shown when a chip or search matches nothing; the script fills in
+           the heading and message for the active chip / search. -->
+      <div id="review-search-empty" class="empty-state" hidden>
+        <svg
+          aria-hidden="true"
+          class="size-10 text-muted-foreground"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path
+            d="M14 2v6h6"></path><path d="M9 15h6"></path></svg
+        >
+        <h2 data-empty-title class="mt-5 text-xl font-bold text-foreground">No reviews here yet</h2>
+        <p data-empty-message class="mx-auto mt-2 max-w-[46ch] leading-7 text-muted-foreground">
+          Try another category or a broader search.
+        </p>
+        <button type="button" data-empty-reset class="hero-cta-secondary mt-7 cursor-pointer">
+          Show all reviews
+        </button>
+      </div>
+      </div>
     </article>
 
     <nav aria-label="Continue reading" class="onward-links">
@@ -160,9 +166,11 @@ const schema = [
     const input = document.querySelector<HTMLInputElement>("#review-search");
     const status = document.querySelector<HTMLElement>("#review-search-status");
     const empty = document.querySelector<HTMLElement>("#review-search-empty");
+    const emptyTitle = empty?.querySelector<HTMLElement>("[data-empty-title]");
+    const emptyMessage = empty?.querySelector<HTMLElement>("[data-empty-message]");
+    const emptyReset = empty?.querySelector<HTMLButtonElement>("[data-empty-reset]");
     const cards = [...document.querySelectorAll<HTMLElement>("[data-review-card]")];
     const chips = [...document.querySelectorAll<HTMLButtonElement>("[data-category-filter]")];
-    const groups = [...document.querySelectorAll<HTMLElement>("[data-review-group]")];
 
     const params = new URLSearchParams(window.location.search);
     let category = params.get("category") ?? "";
@@ -171,7 +179,7 @@ const schema = [
     // A card shows when it is in the selected category (if any) and every word
     // typed appears somewhere in its title, description, topic, category or
     // tags. Both are mirrored to ?q= and ?category= so filtered views can
-    // be shared.
+    // be shared. When nothing matches, the empty state explains why.
     function applyFilters() {
       const query = input?.value ?? "";
       const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
@@ -184,16 +192,24 @@ const schema = [
         card.hidden = !match;
         if (match) visible++;
       }
-      // Hide a group's heading too when none of its cards match.
-      for (const group of groups) {
-        group.hidden = !group.querySelector("[data-review-card]:not([hidden])");
-      }
       for (const chip of chips) {
         chip.setAttribute("aria-pressed", String(chip.dataset.categoryFilter === category));
       }
       const filtered = terms.length > 0 || category !== "";
       if (status) status.textContent = filtered ? `${visible} of ${cards.length} match` : "";
       if (empty) empty.hidden = visible > 0 || cards.length === 0;
+      if (visible === 0 && emptyTitle && emptyMessage) {
+        const label = chips.find((chip) => chip.dataset.categoryFilter === category)?.textContent?.trim();
+        if (terms.length > 0) {
+          emptyTitle.textContent = `No reviews match “${query.trim()}”${category ? ` in ${label}` : ""}`;
+          emptyMessage.textContent =
+            "Try a broader term, such as “Jolion”, “price” or “dealership”, or show all reviews.";
+        } else {
+          emptyTitle.textContent = `No ${label} reviews yet`;
+          emptyMessage.textContent =
+            "Everything here comes from my own car and my own purchase, so this topic will be added once I have something first-hand to share.";
+        }
+      }
 
       const url = new URL(window.location.href);
       if (query.trim()) url.searchParams.set("q", query.trim());
@@ -202,6 +218,12 @@ const schema = [
       else url.searchParams.delete("category");
       history.replaceState(null, "", url);
     }
+
+    emptyReset?.addEventListener("click", () => {
+      category = "";
+      if (input) input.value = "";
+      applyFilters();
+    });
 
     for (const chip of chips) {
       chip.addEventListener("click", () => {
