@@ -1,4 +1,9 @@
 import type { ImageMetadata } from "astro";
+import { STORY_MODIFIED } from "./site";
+
+// "25 September 2026" — the as-of date quoted in the answers, always the
+// story's last-updated date.
+const asOf = new Intl.DateTimeFormat("en-AU", { dateStyle: "long" }).format(new Date(STORY_MODIFIED));
 
 // Facts from the story at "/" that are reused elsewhere: the page itself, the
 // Quick answers FAQ (and its FAQPage data) and /llms.txt. Keep them in step
@@ -19,7 +24,7 @@ export const quickAnswers = [
   {
     question: "Has the dispute been resolved?",
     answer:
-      "No. As of 25 September 2026, the driver's door scratch has not been satisfactorily repaired and an NCAT hearing is yet to be scheduled.",
+      `No. As of ${asOf}, the driver's door scratch has not been satisfactorily repaired and an NCAT hearing is yet to be scheduled.`,
   },
   {
     question: "What has McCarroll's offered?",

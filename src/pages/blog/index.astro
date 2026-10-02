@@ -125,8 +125,9 @@ const schema = [
           </p>
         )
       }
-      <!-- Shown when a chip or search matches nothing; the script fills in
-           the heading and message for the active chip / search. -->
+      <!-- Shown when a chip or search matches nothing. The heading and message
+           are left empty here and filled in by the script, so crawlers never
+           read a "no reviews" heading on a page that has reviews. -->
       <div id="review-search-empty" class="empty-state" hidden>
         <svg
           aria-hidden="true"
@@ -140,10 +141,8 @@ const schema = [
           ><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path
             d="M14 2v6h6"></path><path d="M9 15h6"></path></svg
         >
-        <h2 data-empty-title class="mt-5 text-xl font-bold text-foreground">No reviews here yet</h2>
-        <p data-empty-message class="mx-auto mt-2 max-w-[46ch] leading-7 text-muted-foreground">
-          Try another category or a broader search.
-        </p>
+        <p data-empty-title class="mt-5 text-xl font-bold text-foreground"></p>
+        <p data-empty-message class="mx-auto mt-2 max-w-[46ch] leading-7 text-muted-foreground"></p>
         <button type="button" data-empty-reset class="hero-cta-secondary mt-7 cursor-pointer">
           Show all reviews
         </button>
