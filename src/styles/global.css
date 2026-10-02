@@ -1,5 +1,9 @@
 @import "tailwindcss" source(none);
 @source "../";
+/* The shadcn/ui React components are unused by any page; scanning them would
+   add CSS for classes no page needs. Remove this line if a page starts using
+   one. */
+@source not "../components/ui";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));

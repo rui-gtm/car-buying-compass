@@ -18,9 +18,10 @@ AddType image/webp .webp
   RewriteEngine On
 
   # One canonical address: https://mccarrollsreview.com.au/ (no www).
-  # http:// and www. both go there in a single 301.
+  # http://, www. and any other host name pointing at this folder (e.g. a
+  # parked domain) all go there in a single 301.
   RewriteCond %{HTTPS} !=on [OR]
-  RewriteCond %{HTTP_HOST} ^www\. [NC]
+  RewriteCond %{HTTP_HOST} !^mccarrollsreview\.com\.au$ [NC]
   RewriteRule ^ https://mccarrollsreview.com.au%{REQUEST_URI} [R=301,L,NE]
 
   # /faq/index.html → /faq/ (and /index.html → /), so only the canonical URL
@@ -35,6 +36,13 @@ AddType image/webp .webp
 </IfModule>
 
 <IfModule mod_headers.c>
+  # Machine-readable files stay crawlable but out of search results (they
+  # would otherwise show up as thin duplicate "pages"). AI crawlers still
+  # read llms.txt; noindex only affects search listings.
+  <FilesMatch "^(llms\.txt|rss\.xml|[0-9a-f]{32}\.txt)$">
+    Header set X-Robots-Tag "noindex"
+  </FilesMatch>
+
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set X-Frame-Options "SAMEORIGIN"

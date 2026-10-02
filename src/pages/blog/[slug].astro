@@ -77,7 +77,8 @@ const url = new URL(`/blog/${post.id}/`, SITE_URL).href;
 const crumbs: Crumb[] = [
   { name: "Home", path: "/" },
   { name: "Blog", path: "/blog/" },
-  { name: title, path: `/blog/${post.id}/` },
+  // The short topic, matching the visible breadcrumb trail.
+  { name: topic, path: `/blog/${post.id}/` },
 ];
 
 // With a hero photo, it doubles as the social card and the article image;
@@ -127,7 +128,7 @@ const readMinutes = Math.max(1, Math.round(wordCount / 200));
   <main id="main-content">
     <article class="mx-auto max-w-6xl px-4 pb-8 pt-16 sm:px-6 sm:pt-24">
       <header class="max-w-reading">
-        <Breadcrumbs crumbs={[...crumbs.slice(0, -1), { ...crumbs[crumbs.length - 1], name: topic }]} />
+        <Breadcrumbs crumbs={crumbs} />
         <h1 class="mt-4 text-4xl font-bold leading-tight text-foreground sm:text-5xl">{title}</h1>
         <p class="mt-6 text-xl leading-8 text-muted-foreground">{description}</p>
         <p class="mt-5 text-sm text-muted-foreground">

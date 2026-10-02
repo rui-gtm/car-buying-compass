@@ -1,4 +1,5 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 import { REVIEW_CATEGORIES } from "./lib/categories";
 import { AUTHOR_NAME } from "./lib/site";

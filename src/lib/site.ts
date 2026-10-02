@@ -38,12 +38,18 @@ export const ids = {
   car: `${SITE_URL}/#car`,
 };
 
+// sameAs links point AI and search engines at the one real-world thing each
+// entity refers to (entity disambiguation). Only add links that have been
+// checked to describe exactly that entity.
+// Checked 2026-10-02: the dealer's own site lists 403 Pacific Hwy, Artarmon NSW 2064.
 export const dealerEntity = {
   "@type": "AutoDealer",
   "@id": ids.dealer,
   name: "McCarroll's GWM Artarmon",
+  sameAs: ["https://www.mccarrollsgwm.com.au/"],
   address: {
     "@type": "PostalAddress",
+    streetAddress: "403 Pacific Highway",
     addressLocality: "Artarmon",
     addressRegion: "NSW",
     postalCode: "2064",
@@ -51,12 +57,24 @@ export const dealerEntity = {
   },
 };
 
+const gwmBrand = {
+  "@type": "Brand",
+  name: "GWM",
+  sameAs: ["https://en.wikipedia.org/wiki/Great_Wall_Motor"],
+};
+
+const jolionModel = {
+  "@type": "ProductModel",
+  name: "Haval Jolion",
+  sameAs: ["https://en.wikipedia.org/wiki/Haval_Jolion"],
+};
+
 export const carEntity = {
   "@type": "Car",
   "@id": ids.car,
   name: "2026 GWM Haval Jolion Vanta",
-  brand: { "@type": "Brand", name: "GWM" },
-  model: "Haval Jolion",
+  brand: gwmBrand,
+  model: jolionModel,
   vehicleConfiguration: "Vanta",
   vehicleModelDate: "2026",
 };
@@ -65,8 +83,42 @@ export const carEntity = {
 export const jolionRangeEntity = {
   "@type": "Car",
   name: "GWM Haval Jolion",
-  brand: { "@type": "Brand", name: "GWM" },
-  model: "Haval Jolion",
+  brand: gwmBrand,
+  model: jolionModel,
+};
+
+// Authorities the FAQ and the story cite. Linking them as entities tells
+// answer engines which NCAT / Fair Trading / ACL the advice is about.
+export const authorities = {
+  ncat: {
+    "@type": "GovernmentOrganization",
+    name: "NSW Civil and Administrative Tribunal",
+    alternateName: "NCAT",
+    url: "https://ncat.nsw.gov.au/",
+  },
+  fairTrading: {
+    "@type": "GovernmentOrganization",
+    name: "NSW Fair Trading",
+    url: "https://www.nsw.gov.au/departments-and-agencies/fair-trading",
+  },
+  accc: {
+    "@type": "GovernmentOrganization",
+    name: "Australian Competition and Consumer Commission",
+    alternateName: "ACCC",
+    url: "https://www.accc.gov.au/",
+  },
+  acl: {
+    "@type": "Legislation",
+    name: "Australian Consumer Law",
+    alternateName: "ACL",
+    legislationJurisdiction: "AU",
+    // Schedule 2 of the Competition and Consumer Act 2010 (Cth).
+    isPartOf: {
+      "@type": "Legislation",
+      name: "Competition and Consumer Act 2010",
+      url: "https://www.legislation.gov.au/C2004A00109/latest",
+    },
+  },
 };
 
 export const authorEntity = {

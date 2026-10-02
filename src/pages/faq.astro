@@ -1,165 +1,14 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { AUTHOR_NAME, FAQ_MODIFIED, SITE_URL, breadcrumbList, ids, pageTitle } from "../lib/site";
-
-// Official sources cited under the answers. Check the links still resolve
-// whenever the page is updated.
-const sources = {
-  acccRemedies: {
-    label: "ACCC: Repair, replace, refund, cancel",
-    href: "https://www.accc.gov.au/consumers/buying-products-and-services/repair-replace-refund",
-  },
-  accc: {
-    label: "ACCC: New and second-hand cars",
-    href: "https://www.accc.gov.au/consumers/health-home-car/motor-cars",
-  },
-  fairTrading: {
-    label: "NSW Fair Trading: Buying new and used cars complaints",
-    href: "https://www.nsw.gov.au/departments-and-agencies/fair-trading/complaints-and-enquiries/automotive/buying-new-and-used-cars-and-motorcycles-complaints-and-enquiries",
-  },
-  ncat: {
-    label: "NCAT: Motor vehicle disputes",
-    href: "https://ncat.nsw.gov.au/case-types/consumers-and-businesses/motor-vehicles.html",
-  },
-};
-
-interface FaqEntry {
-  id: string;
-  question: string;
-  answer: string;
-  detail: string;
-  note: string;
-  storyId: string;
-  sources?: { label: string; href: string }[];
-}
-
-const faqs: FaqEntry[] = [
-  {
-    id: "before-deposit",
-    question: "What should I check before paying a car deposit?",
-    answer:
-      "Before paying a deposit, confirm the exact vehicle, drive-away price, refund conditions and delivery estimate in writing.",
-    detail:
-      "Record the model year, variant, engine or powertrain, colour, options and whether the car is new, demonstrator or used. Ask whether the deposit is refundable, what event allows either party to cancel, and whether the quoted delivery date is an estimate or a commitment. Do not rely on a brochure or spoken assurance where a feature matters to your decision.",
-    note: "In my case, the dispute began at delivery, not before it. See what to inspect when the car arrives.",
-    storyId: "collection",
-  },
-  {
-    id: "contract-wording",
-    question: "What should a car purchase contract say?",
-    answer:
-      "The contract should identify the precise car, total price, included features, agreed conditions and any promises that affected your decision.",
-    detail:
-      "Read every field before signing and strike out blank spaces where appropriate. If finance approval, an independent inspection, a trade-in value or a delivery deadline matters, ask for it to be written as a condition. Keep the version you signed and compare it with the dealer's final copy before leaving.",
-    note: "In my case, no repair was ever put in writing, only verbal assurances that the damage was fixed.",
-    storyId: "dents-fixed",
-  },
-  {
-    id: "delivery-inspection",
-    question: "What should I inspect when collecting a new car?",
-    answer:
-      "At delivery, inspect the car in good light and verify its identity, condition, specification, accessories and documents before accepting it.",
-    detail:
-      "Check the VIN against the contract and registration paperwork. Test the keys, lights, cameras, infotainment, charging cable where relevant, spare wheel or repair kit, and every option you paid for. Photograph the vehicle and odometer. If something is wrong, write it on the handover record before driving away and ask what will happen next.",
-    note: "I found two dents, a scratch and a paint stain at collection, before driving away.",
-    storyId: "collection",
-  },
-  {
-    id: "repair-scope-writing",
-    question: "What should I get in writing before a repair, and before a second visit?",
-    answer:
-      "Before the car goes back for any repair, ask the dealership to confirm the scope of work in writing, including whether a panel will be repainted rather than touched up.",
-    detail:
-      "A touch-up and a repaint are different jobs with different outcomes for a panel's finish and resale value. Ask what assessment was done, what work is planned, and get that scope confirmed in writing before booking the visit, not just a verbal assurance that 'it will be fixed'. If the plan changes between visits, ask why and get the revised scope in writing too.",
-    note: "I learned repainting was needed only after two repair visits and repeated assurances that the scratch was fixed.",
-    storyId: "two-attempts",
-  },
-  {
-    id: "damaged-at-delivery",
-    question: "What can I do if a new car is damaged at delivery?",
-    answer:
-      "Record the damage on the handover paperwork and in dated photos before driving away, then ask the dealer in writing how and by when it will be repaired. Under the Australian Consumer Law, a business must fix a minor problem free of charge.",
-    detail:
-      "A problem is major if, for example, the car is unsafe, is very different from its description, or has a serious problem or several smaller ones that would have stopped you buying it had you known. A major problem gives you the choice of a refund or a replacement. If the dealer can't or won't fix a minor problem within a reasonable time, you can have it fixed elsewhere and recover the reasonable cost, ask for a refund or replacement instead, or keep the car and be compensated for the drop in value.",
-    note: "In my case, the damage was found at collection and the dealer chose to repair it. Two repair visits later, the scratch remained.",
-    storyId: "collection",
-    sources: [sources.acccRemedies],
-  },
-  {
-    id: "services-instead",
-    question: "What if a dealer offers free services instead of fixing the damage?",
-    answer:
-      "You can decline. Under the Australian Consumer Law, the remedy for a problem is a free repair, a replacement or a refund; something else, such as free servicing, only takes its place if you choose to accept it.",
-    detail:
-      "If you decline, say so in writing and restate what you are asking for, such as a repair to a stated standard by a stated date. If you are considering accepting, check whether the offer is meant to settle your whole complaint, and keep a copy of what was offered and when.",
-    note: "After the second repair, a sales manager offered two services, which he valued at about $400–$500, instead of further repairing the door.",
-    storyId: "second-collection",
-    sources: [sources.acccRemedies],
-  },
-  {
-    id: "drop-in-value",
-    question: "Can I be compensated if damage or repairs reduce my car's value?",
-    answer:
-      "Possibly. The ACCC says a consumer can keep a product and be compensated for the drop in value caused by a problem, for example when a minor problem is not fixed within a reasonable time, and in some cases for other damages and loss.",
-    detail:
-      "Whether a repaired or repainted panel reduces a car's value, and by how much, depends on the facts and on evidence such as an independent valuation. If you can't agree with the dealer, NCAT can make orders for money to be paid in motor vehicle disputes in NSW. Get independent advice about your own circumstances.",
-    note: "This is the question still in dispute in my case: whether the damage and repainting leave the car worth less.",
-    storyId: "why-declined",
-    sources: [sources.acccRemedies, sources.ncat],
-  },
-  {
-    id: "not-as-described",
-    question: "What are my rights if a new car is damaged or not as described in Australia?",
-    answer:
-      "Under the consumer guarantees in the Australian Consumer Law, a car sold by a dealer must match its description and be of acceptable quality, which includes being acceptable in appearance and finish.",
-    detail:
-      "If a car fails a consumer guarantee, you can ask the dealer for a remedy, which may be a repair, replacement or refund. Which one depends on the facts, including whether the failure is major and whether it can be fixed within a reasonable time. Consumer guarantees operate separately from a manufacturer warranty. In NSW, NSW Fair Trading can explain your options; for advice about your own circumstances, obtain independent legal advice.",
-    note: "My unresolved question is whether a repaired and repainted door reduces the car's resale value, and what that's worth.",
-    storyId: "why-declined",
-    sources: [sources.accc],
-  },
-  {
-    id: "escalate-complaint",
-    question: "How do I complain about a car dealer in NSW?",
-    answer:
-      "Put the complaint to the dealer in writing first, stating the outcome you seek and a response date. If it stays unresolved, you can lodge a complaint with NSW Fair Trading and apply to the NSW Civil and Administrative Tribunal (NCAT).",
-    detail:
-      "Begin with the dealership's sales or service contact, then ask for the dealer principal or complaints manager. Keep the message concise: chronology, evidence, problem, requested remedy and response date. NSW Fair Trading's vehicle complaint form asks for the vehicle details and documents such as quotes, reports and invoices. NCAT's Consumer and Commercial Division hears motor vehicle disputes, including disputes about buying a vehicle from a dealer and about repairs; for a motor vehicle consumer claim you must apply within three years of when the problem began. Outside NSW, contact your state or territory consumer affairs body.",
-    note: "I raised NCAT after two failed repairs and ongoing email follow-up produced no resolution.",
-    storyId: "ncat-offer",
-    sources: [sources.fairTrading, sources.ncat],
-  },
-  {
-    id: "document-records",
-    question: "What records should I keep when buying a car?",
-    answer:
-      "Keep every version of the advertisement, quote, contract, invoice, payment record and message, plus dated notes of conversations.",
-    detail:
-      "Save screenshots as files rather than relying on a listing remaining online. After an important call, email a short summary beginning with 'My understanding of our conversation is…' and invite corrections. Keep photographs from inspection and delivery, the VIN, odometer reading, names or job titles of contacts, and a simple chronology of promised and actual response dates.",
-    note: "Text messages and emails became my record once verbal assurances that the scratch was fixed proved wrong twice.",
-    storyId: "second-collection",
-  },
-];
-
-// Questions are shown in these groups, in this order, each as a closed
-// accordion item.
-const groups = [
-  {
-    title: "Before you sign",
-    ids: ["before-deposit", "contract-wording"],
-  },
-  {
-    title: "Collection and repairs",
-    ids: ["delivery-inspection", "damaged-at-delivery", "repair-scope-writing", "services-instead"],
-  },
-  {
-    title: "Your rights and complaints",
-    ids: ["not-as-described", "drop-in-value", "escalate-complaint", "document-records"],
-  },
-].map((group) => ({
-  ...group,
-  items: group.ids.map((id) => faqs.find((faq) => faq.id === id)!),
-}));
+import {
+  AUTHOR_NAME,
+  FAQ_MODIFIED,
+  SITE_URL,
+  authorities,
+  ids,
+  pageTitle,
+} from "../lib/site";
+import { faqGroups as groups, faqs } from "../lib/faq";
 
 const title = "Buying a New Car in NSW: Delivery Checks, Rights & NCAT";
 const description =
@@ -175,16 +24,24 @@ const schema = [
     dateModified: FAQ_MODIFIED,
     author: { "@id": ids.author },
     isPartOf: { "@id": ids.website },
-    mainEntity: faqs.map(({ question, answer, detail }) => ({
+    about: [authorities.acl, authorities.fairTrading, authorities.ncat],
+    mentions: [authorities.accc],
+    mainEntity: faqs.map(({ id, question, answer, detail, sources }) => ({
       "@type": "Question",
+      "@id": `${SITE_URL}/faq/#${id}`,
       name: question,
-      acceptedAnswer: { "@type": "Answer", text: `${answer} ${detail}` },
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: `${answer} ${detail}`,
+        url: `${SITE_URL}/faq/#${id}`,
+        // The official pages each answer relies on — a strong trust signal
+        // for answer engines quoting it.
+        ...(sources && {
+          citation: sources.map(({ label, href }) => ({ "@type": "WebPage", name: label, url: href })),
+        }),
+      },
     })),
   },
-  breadcrumbList([
-    { name: "Home", path: "/" },
-    { name: "FAQ", path: "/faq/" },
-  ]),
 ];
 ---
 

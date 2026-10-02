@@ -3,6 +3,8 @@
 // array of { question, answer } pairs. Each item is a native <details>, so the
 // answers are always in the HTML (crawlable even while collapsed) and it works
 // without JavaScript. Also emits FAQPage structured data for search engines.
+import { SITE_URL, ids } from "../lib/site";
+
 interface FaqItem {
   question: string;
   answer: string;
@@ -13,10 +15,17 @@ interface Props {
 }
 
 const { items } = Astro.props;
+const pageUrl = new URL(Astro.url.pathname, SITE_URL).href;
 
+// Body-level JSON-LD (an .mdx post can't pass data up to the layout); the @id
+// and isPartOf tie it to the same page and site as the <head> graph.
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
+  "@id": `${pageUrl}#faq`,
+  url: pageUrl,
+  inLanguage: "en-AU",
+  isPartOf: { "@id": ids.website },
   mainEntity: items.map(({ question, answer }) => ({
     "@type": "Question",
     name: question,

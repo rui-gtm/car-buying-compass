@@ -9,6 +9,7 @@ import {
   SITE_URL,
   STORY_MODIFIED,
   STORY_PUBLISHED,
+  authorities,
   carEntity,
   dealerEntity,
   ids,
@@ -45,6 +46,7 @@ const schema = [
     isPartOf: { "@id": ids.website },
     mainEntityOfPage: `${SITE_URL}/`,
     about: [dealerEntity, carEntity],
+    mentions: [authorities.ncat],
     contentLocation: { "@type": "Place", name: "Artarmon, Sydney, NSW, Australia" },
   },
 ];
